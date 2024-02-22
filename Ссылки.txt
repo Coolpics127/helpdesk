@@ -1,0 +1,8 @@
+Модель MTV - https://proproprogs.ru/django/model-mtv-marshrutizaciya-funkcii-predstavleniya
+Модель MTV - https://dzen.ru/a/Xr-y-nqQE2tYOfW3
+Вывод данных из бд - https://qna.habr.com/q/886721
+Вывести данные из бд в html шаблон - https://django.fun/qa/296768/, https://clck.ru/38vx2X
+Объединение полей в __str__ - https://qna.habr.com/q/755617
+Курс Django - https://itproger.com/course/django
+Шаблоны Bootstrap - https://getbootstrap.com/docs/4.0/components/navbar/
+Шаблоны Css - https://doka.guide/css/

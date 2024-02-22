@@ -1,0 +1,8 @@
+from django.urls import path
+from . import views # Импорт файла с методами вывода информации на экран views.py
+
+# При открытии корневой страницы сайта выполнится метод
+# views.index выводящий пользователю главную страницу сайта
+urlpatterns = [
+    path('', views.index)
+]
