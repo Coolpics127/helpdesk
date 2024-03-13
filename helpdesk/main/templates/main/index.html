@@ -2,11 +2,28 @@
 
 <!-- Объявление шаблона, в который будут подставляться данные -->
 {% extends 'main/base_template.html' %}
+{% load static %}
+
+<!-- Подключение дополнительного CSS -->
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'main/css/index.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
 
 <!-- Заголовок страницы -->
 {% block title %}Главная страница{% endblock %}
 
 <!-- Текст на странице -->
 {% block main %}
-<h1>Главная страница</h1>
+<div class="container">
+<div class="title">Добро пожаловать в систему HELPDESK!</div>
+
+    <div class="index_text_block">Система HELPDESK помогает пользователями решать проблемы с программным и аппаратным обеспечением, предоставляет консультации по использованию компьютерной техники. Наши специалисты помогут вам решить любые технические проблемы.
+        <br><b>Система находится на стадии разработки.</b></div>
+    <div class="index_buttons">
+        <a href="" class="index_button"><i class="fa-solid fa-plus logo_on_button"></i>Создать заявку</a>
+        <a href="{% url 'request' %}" class="index_button"><i class="fa-solid fa-list-ul logo_on_button"></i>Список заявок</a>
+        <a href="" class="index_button"><i class="fa-regular fa-envelope logo_on_button"></i>Напишите нам</a>
+
+    </div>
+</div>
 {% endblock %}

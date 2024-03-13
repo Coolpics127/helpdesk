@@ -68,6 +68,7 @@ class Requests (models.Model):
     priority = models.ForeignKey(Priorities, blank=False, on_delete=models.CASCADE)
     status = models.ForeignKey(Statuses, blank=False, on_delete=models.CASCADE)
     date_completed = models.DateTimeField()
+    is_deleted = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'Requests'

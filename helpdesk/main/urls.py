@@ -4,5 +4,7 @@ from . import views # Импорт файла с методами вывода �
 # При открытии корневой страницы сайта выполнится метод
 # views.index выводящий пользователю главную страницу сайта
 urlpatterns = [
-    path('', views.index)
+    path('', views.index, name='index'),
+    path('request', views.request_list, name='request'),
+    path('users', views.user_list, name='users'),
 ]

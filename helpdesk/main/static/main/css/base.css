@@ -1,5 +1,101 @@
 /* Таблица стилей для шаблона base_template */
 
-ul {
-  background-color: blue;
+body {    /* Тело страницы */
+  margin: 0;
+}
+
+nav {    /* Заливка фона верхнего меню */
+  background: #4F566F;
+}
+
+nav ul {    /* Укладывание элементов меню в строку и их выравнивание */
+  margin: 0px 0px 0px 200px;
+  list-style: none;
+}
+
+.menu_item {    /* Пункты меню */
+  display: inline-block;
+  padding: 12px 12px 12px 12px;
+  font-size: 20px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 200;
+  color: white;
+  /* Начальная анимация пунктов меню */
+  opacity: 60%;
+  transition: all 0.3s ease;
+}
+
+.menu_item:hover {   /* Конечная анимация пунктов меню */
+  font-weight: 400;
+  opacity: 100%;
+}
+
+.h1 {    /* Надпись HelpDesk в меню */
+  float: left;
+  margin: 0px;
+  padding: 6px 30px 6px 30px;
+  font-size: 30px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  text-decoration:none;
+  color: white;
+}
+
+.main_logo {    /* Логотип возле надписи HelpDesk в меню */
+  padding-right: 5px;
+}
+
+.dropdown {
+  display: inline-block;
+  position: relative;
+  opacity: 60%;
+  transition: all 0.2s ease;
+}
+
+.dropdown:hover {
+  opacity: 100%
+}
+
+.dropdown_item {
+  padding: 12px 12px 12px 12px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 200;
+  border: none;
+  background: #4F566F;
+  color: white;
+  white-space: nowrap;
+}
+
+.dropdown_logo {
+  margin-left: 1%;
+}
+
+.dropdown_options {
+  display: none;
+  position: absolute;
+  overflow: auto;
+  border-radius: 15px;
+}
+
+.dropdown:hover .dropdown_options {
+  display: block;
+}
+
+.dropdown_list {
+  display: block;
+  color: black;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  text-align: center;
+  white-space: nowrap;
+  text-decoration: none;
+  padding: 10px 25px;
+  background-color: #ebebeb;
+  transition: all 0.1s ease;
+}
+
+.dropdown_list:hover {
+  background-color: #d4d4d4;
 }
