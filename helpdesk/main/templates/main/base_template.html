@@ -41,10 +41,19 @@
             <a href=""><li class="menu_item">Финансы</li></a>
             <a href=""><li class="menu_item">Знания</li></a>
             <div class="dropdown">
-                <button class="dropdown_item">Функции администратора<i class="fa fa-caret-down dropdown_logo"></i></button>
+                <button class="dropdown_item">Функции администратора<i class="fa fa-angle-down dropdown_logo"></i></button>
                 <div class="dropdown_options">
                     <a href="{% url 'users' %}" class="dropdown_list">Настройки пользователей</a>
                     <a href="#" class="dropdown_list">Должности и подразделения</a>
+                </div>
+            </div>
+            <div class="profile">
+                <button class="profile_username">
+                    {{ request.user.last_name }}&nbsp;{{ request.user.first_name }}
+                <i class="fa fa-angle-down dropdown_logo"></i></button>
+                <div class="profile_dropdown">
+                    <a class="profile_dropdown_list">Профиль</a>
+                    <a href="{% url 'logout' %}" class="profile_dropdown_list">Выход</a>
                 </div>
             </div>
         </ul>
