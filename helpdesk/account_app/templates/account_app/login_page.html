@@ -4,14 +4,29 @@
 {% block title %}Авторизация{% endblock %}
 
 {% block content %}
+
 {% for message in messages %}
-<!-- КОСТЫЛЬ ВСПЛЫВАЮЩИХ УВЕДОМЛЕНИЙ ОБ ОШИБКЕ! ИСПРАВИТЬ. -->
-<span class="error_message">
+<div class="alert">
+    <span class="closebtn" onclick="this.ParentElement.style.display='none';">&times;</span>
     <div class="message {{ message.tags }}">
      {{ message }}
     </div>
-</span>
+</div>
 {% endfor %}
+
+<script>
+  var close = document.getElementsByClassName("closebtn");
+  var i;
+
+  for (i = 0; i < close.length; i++) {
+    close[i].onclick = function(){
+      var div = this.parentElement;
+      div.style.opacity = "0";
+      setTimeout(function(){ div.style.display = "none"; }, 600);
+    }
+  }
+</script>
+
 <div class="login_form">
   <div class="container">
     <h1>Войти в HelpDesk</h1>

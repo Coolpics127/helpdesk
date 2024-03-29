@@ -1,0 +1,56 @@
+.container {    /* Контейнер элементов на главной странице (для выравнивания по центру друг за другом) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {    /* Заголовок страницы */
+  margin-top: 14%;
+  margin-bottom: 1%;
+  font-size: 30px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  color: #4d6a8f;
+  border-bottom: 2px #4d6a8f solid;
+}
+
+.index_text_block {     /* Текстовый блок ниже заголовка */
+  text-align: center;
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  width: 30%;
+  line-height: 140%;
+  margin-bottom: 1%;
+}
+
+.index_button {   /* Кнопка "создать заявку" */
+  border: none;
+  margin-bottom: 5%;
+  padding: 10px 25px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #4F566F;
+  color: white;
+  font-size: 13px;
+  border-radius: 30px;
+  /* Настройки контейнера кнопки для выравнивания надписи и значка на кнопке посередине */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  /* Настройки анимации при наведении на кнопку */
+  transition: all 0.1s ease;
+}
+
+.index_button:hover {    /* Конечная анимация при наведении на кнопку */
+  background-color: #4CAF50;
+}
+
+.logo_on_button {   /* Значок на кнопке */
+  padding-right:5%;
+}
