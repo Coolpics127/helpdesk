@@ -14,6 +14,12 @@ def home(request):
 def request_list(request):
     return render(request, 'main/req_page.html')
 
+# Метод, который открывает страницу списка пользователей
 @login_required
 def user_list(request):
     return render(request, 'main/user_list.html')
+
+# Метод, который открывает страницу профиля пользователя
+@login_required
+def user_profile(request):
+    return render(request,'main/profile.html')

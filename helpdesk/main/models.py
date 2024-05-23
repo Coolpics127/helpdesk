@@ -1,4 +1,8 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 # Таблица "Статусы"
 class Statuses (models.Model):
@@ -33,27 +37,38 @@ class Jobs (models.Model):
 
 
 # Таблица "Сотрудники"
-class Workers (models.Model):
-    first_name = models.CharField(max_length=100, blank=False)
-    last_name = models.CharField(max_length=100, blank=False)
-    patronymic = models.CharField(max_length=100)
+class Profile (models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    patron = models.CharField(max_length=100)
     job = models.ForeignKey(Jobs, on_delete=models.CASCADE)
-    email = models.EmailField()
+    phone = models.CharField(blank=True, max_length=20)
+    picture = models.ImageField(blank=True, upload_to='images/profile/', default="images/profile/default_profile.png")
 
-    def __str__(self):
-        return f'{self.last_name} {self.first_name} {self.patronymic}'
+    # Сигналы на автоматическое обновление таблицы при создании или изменении данных пользователя
+    @receiver(post_save, sender=User)
+    def new_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
 
 
 # Таблица "Заявки"
 class Requests (models.Model):
     request_date = models.DateTimeField(blank=False)
-    issued_by = models.ForeignKey(Workers, on_delete=models.CASCADE, related_name='%(class)s_creator')
+    issued_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_creator')
     request_name = models.CharField(max_length=150, blank=False)
-    request_description = models.TextField()
-    responsible = models.ForeignKey(Workers, blank=False, on_delete=models.CASCADE, related_name='%(class)s_worker')
+    request_description = models.TextField(default=None)
+    responsible = models.ForeignKey(User, blank=False, on_delete=models.CASCADE, related_name='%(class)s_worker')
     priority = models.ForeignKey(Priorities, blank=False, on_delete=models.CASCADE)
     status = models.ForeignKey(Statuses, blank=False, on_delete=models.CASCADE)
-    date_completed = models.DateTimeField()
+    desired_date = models.DateField(default=None)
+    commentary = models.TextField(default=None)
+    delete_commentary = models.TextField(default=None)
+    revision_commentary = models.TextField(default=None)
+    date_completed = models.DateTimeField(default=None)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):

@@ -1,0 +1,16 @@
+h2 {
+  font-size: 30px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  color: black;
+  text-align: center;
+}
+
+.profile_list li{
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: black;
+  margin-bottom: 0.5%;
+  list-style: none
+}

@@ -52,7 +52,7 @@
                     {{ request.user.last_name }}&nbsp;{{ request.user.first_name }}
                 <i class="fa fa-angle-down dropdown_logo"></i></button>
                 <div class="profile_dropdown">
-                    <a class="profile_dropdown_list">Профиль</a>
+                    <a href="{% url 'user_profile' %}" class="profile_dropdown_list">Профиль</a>
                     <a href="{% url 'logout' %}" class="profile_dropdown_list">Выход</a>
                 </div>
             </div>
