@@ -2,6 +2,12 @@
 
 <!-- Объявление шаблона, в который будут подставляться данные -->
 {% extends 'main/base_template.html' %}
+{% load static %}
+
+<!-- Подключение дополнительного CSS -->
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'main/css/user_list.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
 
 <!-- Заголовок страницы -->
 {% block title %}Управление пользователями{% endblock %}
@@ -9,4 +15,38 @@
 <!-- Текст на странице -->
 {% block main %}
 <h2>Список пользователей</h2>
+<a href="" class="create_user_button"><i class="fa-solid fa-plus button_icon"></i>Создать заявку</a>
+
+<table class="user_list">
+ <tr class="table_header">
+     <th class="header_cell">ID</th>
+     <th class="header_cell">Фамилия</th>
+     <th class="header_cell">Имя</th>
+     <th class="header_cell">Отчество</th>
+     <th class="header_cell">Подразделение</th>
+     <th class="header_cell">Должность</th>
+     <th class="header_cell">Email</th>
+     <th class="header_cell">Телефон</th>
+     <th class="header_cell">Имя пользователя</th>
+     <th class="header_cell">Роль</th>
+     <th class="header_cell"></th>
+ </tr>
+
+ {% for user in users %}
+ <tr class="table_user_row">
+     <td class="user_cell">{{user.id}}</td>
+     <td class="user_cell">{{user.last_name}}</td>
+     <td class="user_cell">{{user.first_name}}</td>
+     <td class="user_cell">{{user.profile.patron}}</td>
+     <td class="user_cell">{{user.profile.job.division}}</td>
+     <td class="user_cell">{{user.profile.job}}</td>
+     <td class="user_cell">{{user.email}}</td>
+     <td class="user_cell">{{user.profile.phone}}</td>
+     <td class="user_cell">{{user.username}}</td>
+     <td class="user_cell">{{user.groups.all.0}}</td>
+     <td class="user_cell"><i class="fa-regular fa-pen-to-square fa-xl alter_button"></i></td>
+  </tr>
+ {% endfor %}
+</table>
+
 {% endblock %}

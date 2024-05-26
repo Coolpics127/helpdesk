@@ -40,9 +40,12 @@ class Jobs (models.Model):
 class Profile (models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     patron = models.CharField(max_length=100)
-    job = models.ForeignKey(Jobs, on_delete=models.CASCADE)
+    job = models.ForeignKey(Jobs, blank=True, null=True, on_delete=models.CASCADE)
     phone = models.CharField(blank=True, max_length=20)
-    picture = models.ImageField(blank=True, upload_to='images/profile/', default="images/profile/default_profile.png")
+    picture = models.ImageField(blank=True, null=True, upload_to='images/profile/', default="images/profile/default_profile.png")
+
+    def __str__(self):
+        return self.patron
 
     # Сигналы на автоматическое обновление таблицы при создании или изменении данных пользователя
     @receiver(post_save, sender=User)

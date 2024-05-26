@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
@@ -17,7 +18,8 @@ def request_list(request):
 # Метод, который открывает страницу списка пользователей
 @login_required
 def user_list(request):
-    return render(request, 'main/user_list.html')
+    users = get_user_model().objects.all()
+    return render(request, 'main/user_list.html', {'users':users})
 
 # Метод, который открывает страницу профиля пользователя
 @login_required

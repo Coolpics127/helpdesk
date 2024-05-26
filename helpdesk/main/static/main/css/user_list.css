@@ -1,0 +1,68 @@
+h2 {
+  font-size: 30px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  color: black;
+  text-align: center;
+}
+
+.user_list {
+  border-collapse: collapse;
+  width:80%;
+  margin: auto;
+  }
+
+.table_header {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  text-align: center;
+  color: white;
+  background-color: #354251;
+}
+
+.header_cell{
+  border: none;
+  padding: 10px;
+}
+
+.table_user_row {
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.table_user_row:hover {
+  background: #f0f0f0;
+}
+
+.user_cell {
+ border-bottom: 1px solid #707070;
+ padding: 10px;
+}
+
+.create_user_button {
+  border: none;
+  padding: 10px 15px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #4F566F;
+  color: white;
+  font-size: 13px;
+  border-radius: 30px;
+  /* Настройки анимации при наведении на кнопку */
+  transition: all 0.1s ease;
+}
+
+.create_user_button:hover {    /* Конечная анимация при наведении на кнопку */
+  background-color: #4CAF50;
+}
+
+.button_icon {
+  padding-right: 0.3%;
+}

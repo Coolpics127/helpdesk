@@ -20,8 +20,10 @@
     <li><b>Имя пользователя:</b> {{user.username}}</li>
     <li><b>Email:</b> {{user.email}}</li>
     <li><b>Телефон:</b> {{user.profile.phone}}</li>
+    <li><b>Подразделение:</b> {{user.profile.job.division}}</li>
     <li><b>Должность:</b> {{user.profile.job}}</li>
+    <li><b>Роль пользователя:</b> {{user.groups.all.0}}</li>
     <li>Аватар: {{user.profile.url}}</li>
 </ul>
-<img src="media/images/profile/{{ user.get_profile.avatar }}">
+<img src="images/profile/{{user.picture}}">
 {% endblock %}
