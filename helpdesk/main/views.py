@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from .forms import New_user_form, New_user_profile_form
+
 
 def index(request):
     return render(request, 'main/index.html')
@@ -25,3 +27,21 @@ def user_list(request):
 @login_required
 def user_profile(request):
     return render(request,'main/profile.html')
+
+@login_required
+def register(request):
+    if request.method == 'POST':
+        user_form = New_user_form(request.POST)
+        profile_form = New_user_profile_form(request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
+            #form1.save()
+            #username = form1.cleaned_data.get('username')
+            user = user_form.save()
+            profile = profile_form.save(commit = False)
+            profile.user = user
+            profile.save()
+            return redirect('users')
+    else:
+        user_form = New_user_form()
+        profile_form = New_user_profile_form()
+    return render(request, 'main/new_user.html', {'user_form': user_form, 'profile_form': profile_form})

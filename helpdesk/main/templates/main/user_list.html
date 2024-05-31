@@ -15,7 +15,17 @@
 <!-- Текст на странице -->
 {% block main %}
 <h2>Список пользователей</h2>
-<a href="" class="create_user_button"><i class="fa-solid fa-plus button_icon"></i>Создать заявку</a>
+<div class="query_bar">
+  <div class="wrap">
+        <div class="search_bar">
+          <input type="text" class="search_query" placeholder="Поиск по списку...">
+          <button type="submit" class="search_button">
+          <i class="fa fa-search"></i>
+          </button>
+        </div>
+  </div>
+<a href="{% url 'new_user' %}" class="create_user_button"><i class="fa-solid fa-plus button_icon"></i>Добавить пользователя</a>
+</div>
 
 <table class="user_list">
  <tr class="table_header">
@@ -44,9 +54,10 @@
      <td class="user_cell">{{user.profile.phone}}</td>
      <td class="user_cell">{{user.username}}</td>
      <td class="user_cell">{{user.groups.all.0}}</td>
-     <td class="user_cell"><i class="fa-regular fa-pen-to-square fa-xl alter_button"></i></td>
+     <td class="user_button_cell"><i class="fa-regular fa-pen-to-square fa-xl alter_button"></i></td>
   </tr>
  {% endfor %}
 </table>
 
 {% endblock %}
+
