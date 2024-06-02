@@ -1,0 +1,74 @@
+<!-- Содержимое страницы создания пользователя new_user.html, подставляемое в шаблон -->
+
+<!-- Объявление шаблона, в который будут подставляться данные -->
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+<!-- Подключение дополнительного CSS -->
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'main/css/new_user_2.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+
+<!-- Заголовок страницы -->
+{% block title %}Создание пользователя{% endblock %}
+
+{% block main %}
+<h2>Создание пользователя</h2>
+
+<div class="main">
+    <div class="container">
+            <div class="user_info">
+            <form method="post" enctype="multipart/form-data" class="form">
+            {% csrf_token %}
+
+            <div class="user_fullname_header">
+                <h3 class="header">Полное имя</h3>
+            </div>
+
+            <div class="rows">
+                <p>Фамилия<span class="asterix">*</span> : {{ user_form.last_name }}</p>
+                <p>Имя<span class="asterix">*</span> : {{ user_form.first_name }}</p>
+                <p>Отчество<span class="asterix">*</span> : {{ profile_form.patron }}</p>
+            </div>
+
+            <div class="credentials_header">
+                <h3 class="header">Учетные данные</h3>
+            </div>
+
+            <div class="rows">
+                <p>Логин<span class="asterix">*</span> : {{ user_form.username }}</p>
+                <p>Пароль<span class="asterix">*</span> : {{ user_form.password1 }}</p>
+                <p>Повторите пароль<span class="asterix">*</span> : {{ user_form.password2 }}</p>
+            </div>
+
+            <div class="personal_settings_header">
+                <h3 class="header">Настройки пользователя</h3>
+            </div>
+
+            <div class="rows">
+                <p>Должность<span class="asterix">*</span> : {{ profile_form.job }}</p>
+                <p>Email: {{ user_form.email }}</p>
+                <p>Телефон: {{ profile_form.phone }}</p>
+            </div>
+
+            <div class="user_settings_header">
+                <h3 class="header">Настройки учетной записи</h3>
+            </div>
+
+            <div class="rows">
+                <p>Группа<span class="asterix">*</span> : {{ user_form.groups }}</p>
+                <p>Активный аккаунт<span class="asterix">*</span> : {{ user_form.is_active }}</p>
+            </div>
+
+            <div class="buttons">
+               <button type="submit">Регистрация</button>
+               <button type="button">Отменить</button>
+           </div>
+
+            </form>
+        </div>
+        <div class="avatar"></div>
+    </div>
+</div>
+
+{% endblock %}

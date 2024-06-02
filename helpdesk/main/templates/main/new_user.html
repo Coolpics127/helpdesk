@@ -20,6 +20,7 @@
         <form method="post" enctype="multipart/form-data" class="form">
            {% csrf_token %}
 
+            <!-- ФИО -->
              <div class="header_1">
                 <h3>ФИО пользователя</h3>
             </div>
@@ -39,9 +40,11 @@
                 </div>
             </div>
 
+            <!-- Логин и пароли -->
             <div class="header_2">
                 <h3>Учетные данные</h3>
             </div>
+
 
             <div class="credentials">
                 <div class="field">
@@ -58,8 +61,50 @@
                 </div>
             </div>
 
+            <!-- Настройки пользователя -->
+            <div class="header_2">
+                <h3>Настройки профиля</h3>
+            </div>
+
+            <div class="profile_settings">
+                <div class="field">
+                    <p>Email:</p>
+                    {{ user_form.email }}
+                </div>
+                <div class="field">
+                    <p>Телефон:</p>
+                    {{ profile_form.phone }}
+                </div>
+                <div>
+                    <p>Должность:     <span class="asterix">*</span></p>
+                    {{ profile_form.job }}
+                </div>
+            </div>
+
+            <!-- Настройки аккаунта -->
+            <div class="header_2">
+                <h3>Настройки аккаунта</h3>
+            </div>
+
+            <div class="user_settings">
+                <div class="field1">
+                    <p>Роль:     <span class="asterix">*</span></p>
+                    {{ user_form.groups }}
+                </div>
+                <div class="field">
+                    <p>Аватар:</p>
+                    {{ profile_form.picture }}
+                </div>
+                <div class="field">
+                    <p>Активный аккаунт:</p>
+                    {{ user_form.is_active }}
+                </div>
+            </div>
+
+            <!-- Кнопка -->
            <div class="buttons">
                 <button type="submit">Регистрация</button>
+               <button type="button">Отменить</button>
            </div>
         </form>
     </div>
