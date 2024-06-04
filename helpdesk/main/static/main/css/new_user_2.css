@@ -21,11 +21,7 @@ h2 {
 }
 
 .user_info{
-  width: 70%;
-}
-
-.avatar {
-  width: 30%;
+  width: 100%;
 }
 
 .rows {
@@ -50,6 +46,12 @@ h2 {
   border-radius: 20px;
 }
 
+.user_picture {
+  margin-top: 5%;
+  background-color: #64a2bd;
+  border-radius: 20px;
+}
+
 .user_settings_header {
   margin-top: 5%;
   background-color: #64a2bd;
@@ -66,12 +68,15 @@ p {
   margin-left: 5%;
   margin-top: 1%;
   margin-bottom: 1%;
+  display: flex;
+  align-items: center;
+  width: 75%;
 }
 
 .form-input {
+  width: 100%;
   margin-left: 1%;
   padding: 1% 1% 1% 2%;
-  width: 55%;
   border: 1px solid #64a2bd;
   border-radius: 15px;
 }
@@ -79,9 +84,14 @@ p {
 #id_job {
   margin-left: 1%;
   padding: 1% 1% 1% 2%;
-  width: 55%;
+  width: 100%;
   border: 1px solid #64a2bd;
   border-radius: 15px;
+  font-family: 'Inter', sans-serif;
+}
+
+#id_picture {
+  margin-left: 1%;
   font-family: 'Inter', sans-serif;
 }
 
@@ -89,7 +99,6 @@ p {
   width: 90%;
   height: 45px;
   margin-left: 1%;
-  margin-top: 1%;
   padding: 1% 1% 1% 2%;
   border: 1px solid #64a2bd;
   border-radius: 15px;
@@ -99,4 +108,78 @@ p {
 
 .asterix {
   color: red;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3%;
+  gap: 3%;
+
+}
+
+.submit_button {
+  background-color: #4F566F;
+  border: none;
+  padding: 12px 25px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+  white-space: nowrap;
+  color: white;
+  font-size: 13px;
+  border-radius: 30px;
+}
+
+.cancel_button {
+  background-color: #ff5252;
+  border: none;
+  padding: 12px 25px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+  white-space: nowrap;
+  color: white;
+  font-size: 13px;
+  border-radius: 30px;
+}
+
+/* The alert message box */
+.alert {
+  padding: 20px;
+  background-color: #f44336; /* Red */
+  box-shadow: 0px 0px 4px 1px red;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  position: absolute;
+  bottom: 88%;
+  animation: 0.3s show ease;
+}
+
+@keyframes show {
+  from {bottom:100%}
+  to {bottom:88%}
+}
+
+/* The close button */
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+  color: black;
 }
