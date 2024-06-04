@@ -42,7 +42,7 @@ class Profile (models.Model):
     patron = models.CharField(max_length=100)
     job = models.ForeignKey(Jobs, blank=True, default='', null=True, on_delete=models.CASCADE)
     phone = models.CharField(blank=True, max_length=20)
-    picture = models.ImageField(blank=True, null=True, upload_to='images/profile/')
+    picture = models.ImageField(blank=True, null=True, upload_to='images/profile/', default='images/profile/default_profile.png')
 
     def __str__(self):
         return self.patron

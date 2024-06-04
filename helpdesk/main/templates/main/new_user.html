@@ -13,100 +13,97 @@
 {% block title %}Создание пользователя{% endblock %}
 
 {% block main %}
+
 <h2>Создание пользователя</h2>
 
 <div class="main">
     <div class="container">
-        <form method="post" enctype="multipart/form-data" class="form">
-           {% csrf_token %}
+            <div class="user_info">
+                <form method="post" enctype="multipart/form-data" class="form">
+                {% csrf_token %}
 
-            <!-- ФИО -->
-             <div class="header_1">
-                <h3>ФИО пользователя</h3>
+                    <div class="user_fullname_header">
+                        <h3 class="header">Полное имя</h3>
+                    </div>
+
+                    <div class="rows">
+                        <p>Фамилия<span class="asterix">*</span> : {{ user_form.last_name }}</p>
+                        <p>Имя<span class="asterix">*</span> : {{ user_form.first_name }}</p>
+                        <p>Отчество<span class="asterix">*</span> : {{ profile_form.patron }}</p>
+                    </div>
+
+                    <div class="credentials_header">
+                        <h3 class="header">Учетные данные</h3>
+                    </div>
+
+                    <div class="rows">
+                        <p>Логин<span class="asterix">*</span> : {{ user_form.username }}</p>
+                        {{ username.error }}
+                        <p>Пароль<span class="asterix">*</span> : {{ user_form.password1 }}</p>
+                        <p>Повторите пароль<span class="asterix">*</span> : {{ user_form.password2 }}</p>
+                    </div>
+
+                    <div class="personal_settings_header">
+                        <h3 class="header">Настройки пользователя</h3>
+                    </div>
+
+                    <div class="rows">
+                        <p>Должность<span class="asterix">*</span> : {{ profile_form.job }}</p>
+                        <p>Email: {{ user_form.email }}</p>
+                        <p>Телефон: {{ profile_form.phone }}</p>
+                    </div>
+
+                    <div class="user_picture">
+                        <h3 class="header">Аватар</h3>
+                    </div>
+
+                    <div class="rows">
+                        <p>Аватар пользователя: {{ profile_form.picture }}</p>
+                    </div>
+
+                    <div class="user_settings_header">
+                        <h3 class="header">Настройки учетной записи</h3>
+                    </div>
+
+                    <div class="rows">
+                        <p>Группа<span class="asterix">*</span> : {{ user_form.groups }}</p>
+                        <p>Активный аккаунт<span class="asterix">*</span> : {{ user_form.is_active }}</p>
+                    </div>
+
+                    <div class="buttons">
+                       <button type="submit" class="submit_button">Регистрация</button>
+                       <button onclick="window.location.href='{% url 'users' %}';" type="button" class="cancel_button">Отменить</button>
+                   </div>
+                </form>
             </div>
-
-            <div class="full_name">
-                <div class="field">
-                    <p>Фамилия:     <span class="asterix">*</span></p>
-                    {{ user_form.last_name }}
-                </div>
-                <div class="field">
-                    <p>Имя:     <span class="asterix">*</span></p>
-                    {{ user_form.first_name }}
-                </div>
-                <div class="field">
-                    <p>Отчество (при наличии):</p>
-                    {{ profile_form.patron }}
-                </div>
-            </div>
-
-            <!-- Логин и пароли -->
-            <div class="header_2">
-                <h3>Учетные данные</h3>
-            </div>
-
-
-            <div class="credentials">
-                <div class="field">
-                    <p>Логин:     <span class="asterix">*</span></p>
-                    {{ user_form.username }}
-                </div>
-                <div class="field">
-                    <p>Пароль:     <span class="asterix">*</span></p>
-                    {{ user_form.password1 }}
-                </div>
-                <div class="field">
-                    <p>Повторите пароль:     <span class="asterix">*</span></p>
-                    {{ user_form.password2 }}
-                </div>
-            </div>
-
-            <!-- Настройки пользователя -->
-            <div class="header_2">
-                <h3>Настройки профиля</h3>
-            </div>
-
-            <div class="profile_settings">
-                <div class="field">
-                    <p>Email:</p>
-                    {{ user_form.email }}
-                </div>
-                <div class="field">
-                    <p>Телефон:</p>
-                    {{ profile_form.phone }}
-                </div>
-                <div>
-                    <p>Должность:     <span class="asterix">*</span></p>
-                    {{ profile_form.job }}
-                </div>
-            </div>
-
-            <!-- Настройки аккаунта -->
-            <div class="header_2">
-                <h3>Настройки аккаунта</h3>
-            </div>
-
-            <div class="user_settings">
-                <div class="field1">
-                    <p>Роль:     <span class="asterix">*</span></p>
-                    {{ user_form.groups }}
-                </div>
-                <div class="field">
-                    <p>Аватар:</p>
-                    {{ profile_form.picture }}
-                </div>
-                <div class="field">
-                    <p>Активный аккаунт:</p>
-                    {{ user_form.is_active }}
-                </div>
-            </div>
-
-            <!-- Кнопка -->
-           <div class="buttons">
-                <button type="submit">Регистрация</button>
-               <button type="button">Отменить</button>
-           </div>
-        </form>
     </div>
 </div>
+
+<div class="screen1">
+{% if user_form.errors %}
+    <div class="alert">
+        <span class="closebtn" onclick="this.ParentElement.style.display='none';">&times;</span>
+        {% for field in user_form %}
+            {% for error in field.errors %}
+                <ul>
+                    <li>{{ error|escape }}</li>
+                </ul>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<script>
+var close = document.getElementsByClassName("closebtn");
+var i;
+for (i = 0; i < close.length; i++) {
+    close[i].onclick = function(){
+        var div = this.parentElement;
+        div.style.opacity = "0";
+        setTimeout(function(){ div.style.display = "none"; }, 600);
+        }
+    }
+</script>
+</div>
+
 {% endblock %}

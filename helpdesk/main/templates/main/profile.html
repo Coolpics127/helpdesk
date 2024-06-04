@@ -23,7 +23,7 @@
     <li><b>Подразделение:</b> {{user.profile.job.division}}</li>
     <li><b>Должность:</b> {{user.profile.job}}</li>
     <li><b>Роль пользователя:</b> {{user.groups.all.0}}</li>
-    <li>Аватар: {{user.profile.url}}</li>
+    <li>Аватар: {{user.profile.picture.url}}</li>
 </ul>
-<img src="images/profile/{{user.picture}}">
+<img src="images/profile/{{user.get_profile.picture}}">
 {% endblock %}
