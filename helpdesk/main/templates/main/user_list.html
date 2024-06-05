@@ -54,7 +54,13 @@
      <td class="user_cell">{{user.profile.phone}}</td>
      <td class="user_cell">{{user.username}}</td>
      <td class="user_cell">{{user.groups.all.0}}</td>
-     <td class="user_button_cell"><i class="fa-regular fa-pen-to-square fa-xl alter_button"></i></td>
+     <td class="user_button_cell">
+         <a title="Открыть профиль" href="{% url 'user_details' user.id %}">
+            <div class="edit_button">
+                <i class="fa-solid fa-magnifying-glass alter_button"></i>
+            </div>
+         </a>
+     </td>
   </tr>
  {% endfor %}
 </table>

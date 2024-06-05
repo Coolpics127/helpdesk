@@ -10,11 +10,11 @@
 {% endblock %}
 
 <!-- Заголовок страницы -->
-{% block title %}Создание пользователя{% endblock %}
+{% block title %}Настройки пользователя{% endblock %}
 
 {% block main %}
 
-<h2>Создание пользователя</h2>
+<h2>Редактирование данных</h2>
 
 <div class="main">
     <div class="container">
@@ -38,8 +38,6 @@
 
                     <div class="rows">
                         <p>Логин<span class="asterix">*</span> : {{ user_form.username }}</p>
-                        <p>Пароль<span class="asterix">*</span> : {{ user_form.password1 }}</p>
-                        <p>Повторите пароль<span class="asterix">*</span> : {{ user_form.password2 }}</p>
                     </div>
 
                     <div class="personal_settings_header">

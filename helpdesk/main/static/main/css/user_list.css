@@ -74,12 +74,19 @@ margin-bottom: 10px;
 }
 
 .user_button_cell {
-  border-left: 1px solid #707070;
   border-bottom: 1px solid #707070;
+  padding-left: 20px;
 }
 
-.button_icon {
-  padding-right: 0.3%;
+.edit_button {
+  background-color: #4CAF50;
+  padding: 7px;
+  border-radius: 15%;
+  cursor: pointer;
+}
+
+.alter_button {
+  color: white;
 }
 
 /* ---------- Оформление строки поиска ---------- */
