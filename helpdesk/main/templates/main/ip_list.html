@@ -1,0 +1,62 @@
+<!-- Содержимое страницы со списком пользователей user_list.html, подставляемое в шаблон -->
+
+<!-- Объявление шаблона, в который будут подставляться данные -->
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+<!-- Подключение дополнительного CSS -->
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'main/css/user_list.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+
+<!-- Заголовок страницы -->
+{% block title %}Карта IP-адресов{% endblock %}
+
+<!-- Текст на странице -->
+{% block main %}
+<h2>Карта IP-адресов</h2>
+<div class="query_bar">
+  <div class="wrap">
+        <div class="search_bar">
+          <input type="text" class="search_query" placeholder="Поиск по списку...">
+          <button type="submit" class="search_button">
+          <i class="fa fa-search"></i>
+          </button>
+        </div>
+  </div>
+<a href="{% url 'new_user' %}" class="create_user_button"><i class="fa-solid fa-plus button_icon"></i>Добавить запись</a>
+</div>
+
+<table class="user_list">
+ <tr class="table_header">
+     <th class="header_cell">ID</th>
+     <th class="header_cell">IP-адрес</th>
+     <th class="header_cell">MAC-адрес</th>
+     <th class="header_cell">Пользователь</th>
+     <th class="header_cell">Имя устройства</th>
+     <th class="header_cell">Тип устройства</th>
+     <th class="header_cell"></th>
+ </tr>
+
+ {% for ip in ip_list %}
+ <tr class="table_user_row">
+     <td class="user_cell">{{ip.id}}</td>
+     <td class="user_cell">{{ip.ip_adress}}</td>
+     <td class="user_cell">{{ip.mac_adress}}</td>
+     <td class="user_cell">{{ip.user.last_name}} {{ip.user.first_name}}</td>
+     <td class="user_cell">{{ip.name}}</td>
+     <td class="user_cell">{{ip.hardware.name}}</td>
+
+     <td class="user_button_cell">
+         <a title="Открыть запись" href="{% url 'user_details' user.id %}">
+            <div class="edit_button">
+                <i class="fa-solid fa-magnifying-glass alter_button"></i>
+            </div>
+         </a>
+     </td>
+  </tr>
+ {% endfor %}
+</table>
+
+{% endblock %}
+

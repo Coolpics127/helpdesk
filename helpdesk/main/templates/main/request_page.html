@@ -1,0 +1,53 @@
+<!-- Содержимое страницы создания пользователя new_request.html, подставляемое в шаблон -->
+
+<!-- Объявление шаблона, в который будут подставляться данные -->
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+<!-- Подключение дополнительного CSS -->
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'main/css/new_request.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+
+<!-- Заголовок страницы -->
+{% block title %}Создание пользователя{% endblock %}
+
+{% block main %}
+
+<div class="main">
+    <div class="container">
+        <div class="header">
+            <h3>Заявка №{{request.id}} от {{request.request_date}}</h3>
+        </div>
+        <div class="body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="rows">
+                        <p class="detailed_view_headers">Инициатор заявки:</p>
+                        <div class="detailed_view_fields">{{ request.issued_by.last_name }} {{ request.issued_by.first_name }}</div>
+                        <p class="detailed_view_headers">Название заявки:</p>
+                        <div class="detailed_view_fields">{{request.request_name }}</div>
+                        <p class="detailed_view_headers">Описание заявки:</p>
+                        <div class="detailed_view_fields">{{ request.request_description }}</div>
+                        <p class="detailed_view_headers">Ответственный:</p>
+                        <div class="detailed_view_fields">{{ request.responsible.last_name }} {{ request.responsible.first_name }}</div>
+                        <div class="properties">
+                            <p class="detailed_view_headers">Приоритет: {{ request.priority }}</p>
+                            <p class="detailed_view_headers">Статус: {{ request.status }}</p>
+                            <p class="detailed_view_headers">Желаемая дата исполнения: {{ request.desired_date }}</p>
+                        </div>
+                        <p class="detailed_view_headers">Прикрепленные объекты: {{ request.attachment }}</p>
+                    </div>
+                <div class="buttons">
+                    <button type="submit" class="cancel_button">Отменить заявку</button>
+                    <button type="submit" class="delegate_button">Назначить исполнителя</button>
+                    <button type="submit" class="submit_button">Взять в работу</button>
+                    <button onclick="window.location.href='{% url 'requests' %}';" type="button" class="back_button">Назад</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

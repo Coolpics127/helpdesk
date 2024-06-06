@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 
 # Таблица "Статусы"
@@ -61,14 +62,14 @@ class Profile (models.Model):
 
 # Таблица "Заявки"
 class Requests (models.Model):
-    request_date = models.DateTimeField(blank=False)
-    issued_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_creator')
+    request_date = models.DateTimeField(blank=True, null=True, default=timezone.now, editable=False)
+    issued_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_creator', blank=True, null=True)
     request_name = models.CharField(max_length=150, blank=False)
     request_description = models.TextField(default=None)
     responsible = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE, related_name='%(class)s_worker')
     priority = models.ForeignKey(Priorities, blank=False, on_delete=models.CASCADE)
-    status = models.ForeignKey(Statuses, blank=False, on_delete=models.CASCADE)
-    desired_date = models.DateField(blank=True, null=True)
+    status = models.ForeignKey(Statuses, on_delete=models.CASCADE, blank=True, null=True)
+    desired_date = models.DateTimeField(blank=True, null=True, default='')
     attachment = models.FileField(blank=True, null=True, upload_to='user_files/')
     commentary = models.TextField(blank=True, null=True)
     delete_commentary = models.TextField(blank=True, null=True)
@@ -78,3 +79,49 @@ class Requests (models.Model):
 
     def __str__(self):
         return self.request_name
+
+class Hardware (models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class IP_map (models.Model):
+    ip_adress = models.GenericIPAddressField()
+    mac_adress = models.CharField(max_length=100, blank=True, null=True,)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, default='', null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    hardware = models.ForeignKey(Hardware, on_delete=models.CASCADE, blank=True, default='', null=True)
+    def __str__(self):
+        return self.ip_adress
+
+class Resourse_types (models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class LogPass (models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, default='', null=True)
+    resource = models.ForeignKey(Resourse_types, on_delete=models.CASCADE, blank=True, default='', null=True)
+    login = models.CharField(max_length=100, blank=True, null=True)
+    password = models.CharField(max_length=100, blank=True, null=True)
+    extra_info = models.CharField(max_length=200, blank=True, null=True, default='')
+
+    def __str__(self):
+        return self.login
+
+class Suppliers (models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class Customs (models.Model):
+    date = models.DateTimeField(blank=True, default='', null=True)
+    supplier = models.ForeignKey(Suppliers, on_delete=models.CASCADE, blank=True, default='', null=True)
+    summ = models.IntegerField(blank=True, default='', null=True)
+    contents = models.TextField(blank=True, default='', null=True)
+
+    def __str__(self):
+        return self.summ

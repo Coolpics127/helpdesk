@@ -1,7 +1,7 @@
 <!-- Содержимое страницы с заявками req_page.html, подставляемое в шаблон -->
 
 <!-- Объявление шаблона, в который будут подставляться данные -->
-{% extends 'main/base_template.html' %}
+{% extends 'main/base_template_user.html' %}
 {% load static %}
 
 <!-- Подключение дополнительного CSS -->
@@ -52,7 +52,7 @@
      <td class="request_cell">{{request.status}}</td>
      <td class="request_cell">{{request.desired_date}}</td>
      <td class="request_button_cell">
-         <a title="Просмотр заявки" href="{% url 'request_details' request.id %}">
+         <a title="Просмотр заявки" href="{% url 'user_details' user.id %}">
             <div class="edit_button">
                 <i class="fa-solid fa-magnifying-glass alter_button"></i>
             </div>

@@ -1,13 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.db.models.functions import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView, UpdateView
-
 from .forms import New_user_form, New_user_profile_form, New_request
-from .models import Profile, Requests
+from .models import Profile, Requests, Statuses, IP_map, LogPass, Customs
 
 
 def index(request):
@@ -16,59 +14,122 @@ def index(request):
 # Метод, который открывает (рендерит) страницу home.html
 @login_required
 def home(request):
-    return render(request, 'main/home.html')
+    user = request.user
+    if user.groups.filter(id='1').exists():
+        return render(request, 'main/home.html')
+    else:
+        return render(request, 'main/home_user.html')
+
+@login_required
+def supplies(request):
+    user = request.user
+    if user.groups.filter(id='1').exists():
+        supplies = Customs.objects.all()
+        return render(request, 'main/finances.html', {'supplies':supplies})
+    else:
+        return redirect('home')
+
+def knoledge_base(request):
+    user = request.user
+    if user.groups.filter(id='1').exists():
+        return render(request, 'main/knowledge_base.html')
+    else:
+        return redirect('home')
 
 # Метод, который открывает (рендерит) страницу с заявками req_page.html
 @login_required
 def request_list(request):
-    requests = Requests.objects.all()
-    return render(request, 'main/requests.html',{'requests':requests})
+    user = request.user
+    if user.groups.filter(id='1').exists():
+        requests = Requests.objects.filter(is_deleted=False).order_by('-id')
+        return render(request, 'main/requests.html',{'requests':requests})
+    else:
+        requests = Requests.objects.filter(is_deleted=False, issued_by=user).order_by('-id')
+        return render(request, 'main/requests_user.html', {'requests': requests})
 
 # Метод, который открывает страницу списка пользователей
 @login_required
 def user_list(request):
-    users = get_user_model().objects.all()
-    return render(request, 'main/user_list.html', {'users':users})
+    user = request.user
+    if user.groups.filter(id='1').exists():
+        users = get_user_model().objects.all().order_by('last_name')
+        return render(request, 'main/user_list.html', {'users':users})
+    else:
+        return redirect('home')
 
 # Метод, который открывает страницу профиля пользователя
 @login_required
 def user_profile(request):
-    return render(request,'main/profile.html')
+    user = request.user
+    if user.groups.filter(id='1').exists():
+        return render(request,'main/profile.html')
+    else:
+        return render(request,'main/profile_user.html')
 
 # Метод, который открывает страницу управления ИТ-активами
 @login_required
 def assets(request):
-    return render(request, 'main/assets.html')
+    user = request.user
+    if user.groups.filter(id='1').exists():
+        return render(request, 'main/assets.html')
+    else:
+        return redirect('home')
+
+@login_required
+def ip_list(request):
+    user = request.user
+    if user.groups.filter(id='1').exists():
+        ip_list = IP_map.objects.all()
+        return render(request, 'main/ip_list.html', {'ip_list':ip_list})
+    else:
+        return redirect('home')
+
+@login_required
+def logpasslist(request):
+    user = request.user
+    if user.groups.filter(id='1').exists():
+        logpass = LogPass.objects.all()
+        return render(request, 'main/logpass_list.html', {'logpass':logpass})
+    else:
+        return redirect('home')
 
 @login_required
 def register(request):
-    if request.method == 'POST':
-        user_form = New_user_form(request.POST)
-        profile_form = New_user_profile_form(request.POST)
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-            profile = profile_form.save(commit = False)
-            profile.user = user
-            profile.save()
-            return redirect('users')
+    user = request.user
+    if user.groups.filter(id='1').exists():
+        if request.method == 'POST':
+            user_form = New_user_form(request.POST, request.FILES)
+            profile_form = New_user_profile_form(request.POST)
+            if user_form.is_valid() and profile_form.is_valid():
+                user = user_form.save()
+                profile = profile_form.save(commit = False)
+                profile.user = user
+                profile.save()
+                return redirect('users')
+        else:
+            user_form = New_user_form()
+            profile_form = New_user_profile_form()
+        return render(request, 'main/new_user.html', {'user_form': user_form, 'profile_form': profile_form})
     else:
-        user_form = New_user_form()
-        profile_form = New_user_profile_form()
-    return render(request, 'main/new_user.html', {'user_form': user_form, 'profile_form': profile_form})
+        return redirect('home')
 
 @login_required
 def create_request(request):
+    user = request.user
     if request.method == 'POST':
-        request_form = New_request(request.POST)
+        request_form = New_request(request.POST, request.FILES)
         if request_form.is_valid():
             req = request_form.save(commit=False)
             req.issued_by = request.user
-            req.request_date = datetime.now()
+            req.status = Statuses.objects.get(id='1')
             req.save()
             return redirect('requests')
     else:
         request_form = New_request()
-    return render(request, 'main/new_request.html',{'request_form': request_form})
+    if user.groups.filter(id='1').exists():
+        return render(request, 'main/new_request.html',{'request_form': request_form})
+    else:
+        return render(request, 'main/new_request_user.html', {'request_form': request_form})
 
 class UserProfileView(DetailView):
     model = User
@@ -106,3 +167,8 @@ class UserProfileUpdate(UpdateView):
 
     def get_absolute_url(self):
         return f'/users/{self.id}'
+
+class RequestView(DetailView):
+    model = Requests
+    template_name = 'main/request_page.html'
+    context_object_name = 'request'

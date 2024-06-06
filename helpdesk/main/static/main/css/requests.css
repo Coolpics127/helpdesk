@@ -12,14 +12,18 @@ flex-direction: row;
 justify-content: center;
 align-items: center;
 margin-bottom: 10px;
+gap: 1%;
 }
 
 /* ---------- Оформление строки поиска ---------- */
 
+.wrap {
+  width: 20%;
+}
+
 .search_bar {
   position: relative;
   display: flex;
-  width: 90%;
 }
 
 .search_query {

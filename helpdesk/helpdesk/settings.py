@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-zvr01)%jk)m2^nej%t&b-1b59ugs_!b_t+_*ry4nb^hr@&o&js
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.0.2','127.0.0.1']
 
 
 # Application definition
@@ -81,7 +81,7 @@ DATABASES = { # Подключение базы данных
         'NAME': 'requests_db',
         'USER': 'Django',
         'PASSWORD': 'cp3505dn',
-        'HOST': 'localhost',
+        'HOST': '192.168.0.200',
         'PORT': '3306',
     }
 }
@@ -128,7 +128,8 @@ MEDIA_URL = '/media/'
 
 # Обязательная команда для включения для поддержки статических файлов (указание их расположения в папке static)
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "main/static",
+    BASE_DIR / "account_app/static",
 ]
 
 # Default primary key field type

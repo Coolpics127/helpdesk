@@ -1,0 +1,35 @@
+h2 {
+  font-size: 30px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  color: black;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.inset {
+  text-decoration: none;
+
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 1%;
+  margin-right: 1%;
+  padding: 2%;
+  background-color: #267cde;
+  border-radius: 30px;
+}
+
+h3 {
+  font-family: 'Inter', sans-serif;
+  color: white;
+}

@@ -1,0 +1,65 @@
+<!-- Содержимое страницы со списком пользователей user_list.html, подставляемое в шаблон -->
+
+<!-- Объявление шаблона, в который будут подставляться данные -->
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+<!-- Подключение дополнительного CSS -->
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'main/css/user_list.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+
+<!-- Заголовок страницы -->
+{% block title %}Финансы{% endblock %}
+
+<!-- Текст на странице -->
+{% block main %}
+<h2>Список закупок</h2>
+
+<div class="stats">
+    <h3>Остаток: <span>860 500</span> .руб</h3>
+    <h3>Израсходовано: <span>235 500</span> .руб</h3>
+</div>
+
+
+<div class="query_bar">
+  <div class="wrap">
+        <div class="search_bar">
+          <input type="text" class="search_query" placeholder="Поиск по списку...">
+          <button type="submit" class="search_button">
+          <i class="fa fa-search"></i>
+          </button>
+        </div>
+  </div>
+<a href="{% url 'new_user' %}" class="create_user_button"><i class="fa-solid fa-plus button_icon"></i>Добавить запись</a>
+</div>
+
+<table class="user_list">
+ <tr class="table_header">
+     <th class="header_cell">ID</th>
+     <th class="header_cell">Дата</th>
+     <th class="header_cell">Поставщик</th>
+     <th class="header_cell">Сумма, руб.</th>
+     <th class="header_cell"></th>
+ </tr>
+
+ {% for supply in supplies %}
+ <tr class="table_user_row">
+     <td class="user_cell">{{supply.id}}</td>
+     <td class="user_cell">{{supply.date}}</td>
+     <td class="user_cell">{{supply.supplier.name}}</td>
+     <td class="user_cell">{{supply.summ}}</td>
+
+     <td class="user_button_cell">
+         <a title="Открыть запись" href="{% url 'user_details' user.id %}">
+            <div class="edit_button">
+                <i class="fa-solid fa-magnifying-glass alter_button"></i>
+            </div>
+         </a>
+     </td>
+  </tr>
+ {% endfor %}
+</table>
+
+{% endblock %}
+

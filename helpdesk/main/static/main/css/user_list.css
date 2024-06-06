@@ -137,3 +137,13 @@ margin-bottom: 10px;
 .alter_button {
   color: white;
 }
+
+.stats {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  margin-left: 10%;
+}
+
+span {
+  color: red;
+}

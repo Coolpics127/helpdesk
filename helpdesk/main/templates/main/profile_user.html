@@ -1,0 +1,38 @@
+<!-- Содержимое страницы с профилем пользователя profile.html, подставляемое в шаблон -->
+
+<!-- Объявление шаблона, в который будут подставляться данные -->
+{% extends 'main/base_template_user.html' %}
+{% load static %}
+
+<!-- Подключение дополнительного CSS -->
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'main/css/profile.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+
+<!-- Заголовок страницы -->
+{% block title %}Профиль пользователя{% endblock %}
+
+<!-- Текст на странице -->
+{% block main %}
+<h2>Профиль пользователя</h2>
+<div class="container">
+    <div class="user_info">
+        <ul class="profile_list">
+            <li><b>ФИО:</b> {{user.last_name}} {{user.first_name}} {{user.profile.patron}}</li>
+            <li><b>Имя пользователя:</b> {{user.username}}</li>
+            <li><b>Email:</b> {{user.email}}</li>
+            <li><b>Телефон:</b> {{user.profile.phone}}</li>
+            <li><b>Подразделение:</b> {{user.profile.job.division}}</li>
+            <li><b>Должность:</b> {{user.profile.job}}</li>
+            <li><b>Роль пользователя:</b> {{user.groups.all.0}}</li>
+        </ul>
+    </div>
+    <div class="avatar">
+         <img class="avatar_image" src="{{MEDIA_URL}}{{user.profile.picture.url}}">
+    </div>
+</div>
+<div class="buttons">
+    <a href="" class="button" id="edit">Редактировать профиль</a>
+    <a href="{% url 'users' %}" class="button" id="back">Назад</a>
+</div>
+{% endblock %}

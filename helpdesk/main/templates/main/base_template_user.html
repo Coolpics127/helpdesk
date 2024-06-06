@@ -40,16 +40,7 @@
 
         <ul>
             <a href="{% url 'requests' %}"><li class="menu_item">Заявки</li></a>
-            <a href="{% url 'assets' %}"><li class="menu_item">ИТ-активы</li></a>
-            <a href="{% url 'finances' %}"><li class="menu_item">Финансы</li></a>
-            <a href="{% url 'knowledge' %}"><li class="menu_item">Знания</li></a>
-            <div class="dropdown">
-                <button class="dropdown_item">Функции администратора<i class="fa fa-angle-down dropdown_logo"></i></button>
-                <div class="dropdown_options">
-                    <a href="{% url 'users' %}" class="dropdown_list">Настройки пользователей</a>
-                    <a href="#" class="dropdown_list">Настройка справочников</a>
-                </div>
-            </div>
+            <a href=""><li class="menu_item">Знания</li></a>
             <div class="profile">
                 <button class="profile_username">
                     {{ request.user.last_name }}&nbsp;{{ request.user.first_name }}
