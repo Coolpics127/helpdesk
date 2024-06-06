@@ -6,7 +6,11 @@ from . import views # Импорт файла с методами вывода �
 urlpatterns = [
     path('', views.index),
     path('home', views.home, name='home'),
-    path('request', views.request_list, name='request'),
+    path('requests', views.request_list, name='requests'),
+    path('requests/new_request', views.create_request, name='new_request'),
+
+    path('assets', views.assets, name='assets'),
+
     path('users', views.user_list, name='users'),
     path('profile', views.user_profile, name='user_profile'),
     path('users/new_user', views.register, name='new_user'),

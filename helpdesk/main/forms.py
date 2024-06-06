@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, Group
-from .models import Profile, Jobs
+from .models import Profile, Jobs, Requests, Priorities
 
 
 class New_user_form(UserCreationForm):
@@ -28,3 +28,17 @@ class New_user_profile_form(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('patron', 'job', 'phone', 'picture')
+
+
+class New_request(forms.ModelForm):
+    request_date = forms.SplitHiddenDateTimeWidget()
+    issued_by = forms.HiddenInput()
+    request_name = forms.CharField(label='Название заявки', widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Введите название заявки...'}))
+    request_description = forms.CharField(label='Описание заявки', widget=forms.Textarea(attrs={'class': 'form-input'}))
+    priority = forms.ModelChoiceField(label='Приоритет', empty_label='Установите приоритет', queryset=Priorities.objects.all(), required=False)
+    desired_date = forms.DateField(label='Желаемая дата исполнения', widget=forms.DateInput(attrs={'class': 'form-input'}), required=False)
+    attachment = forms.FileField(label='Прикрепленные объекты',widget=forms.FileInput(attrs={'class': 'form-input'}),required=False)
+
+    class Meta:
+        model = Requests
+        fields = ('request_date','issued_by','request_name','request_description','priority','desired_date','attachment')

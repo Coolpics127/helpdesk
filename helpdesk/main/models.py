@@ -42,7 +42,7 @@ class Profile (models.Model):
     patron = models.CharField(max_length=100)
     job = models.ForeignKey(Jobs, blank=True, default='', null=True, on_delete=models.CASCADE)
     phone = models.CharField(blank=True, max_length=20)
-    picture = models.ImageField(blank=True, null=True, upload_to='images/profile/', default='images/profile/default_profile.png')
+    picture = models.ImageField(blank=True, null=True, upload_to='avatars/', default='avatars/default_profile.jpg')
 
     def __str__(self):
         return self.patron
@@ -65,14 +65,15 @@ class Requests (models.Model):
     issued_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_creator')
     request_name = models.CharField(max_length=150, blank=False)
     request_description = models.TextField(default=None)
-    responsible = models.ForeignKey(User, blank=False, on_delete=models.CASCADE, related_name='%(class)s_worker')
+    responsible = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE, related_name='%(class)s_worker')
     priority = models.ForeignKey(Priorities, blank=False, on_delete=models.CASCADE)
     status = models.ForeignKey(Statuses, blank=False, on_delete=models.CASCADE)
-    desired_date = models.DateField(default=None)
-    commentary = models.TextField(default=None)
-    delete_commentary = models.TextField(default=None)
-    revision_commentary = models.TextField(default=None)
-    date_completed = models.DateTimeField(default=None)
+    desired_date = models.DateField(blank=True, null=True)
+    attachment = models.FileField(blank=True, null=True, upload_to='user_files/')
+    commentary = models.TextField(blank=True, null=True)
+    delete_commentary = models.TextField(blank=True, null=True)
+    revision_commentary = models.TextField(blank=True, null=True)
+    date_completed = models.DateTimeField(blank=True, null=True)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):

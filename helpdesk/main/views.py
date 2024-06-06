@@ -1,13 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.db.models.functions import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView
 
-from .forms import New_user_form, New_user_profile_form
-from .models import Profile
+from .forms import New_user_form, New_user_profile_form, New_request
+from .models import Profile, Requests
 
 
 def index(request):
@@ -21,7 +21,8 @@ def home(request):
 # Метод, который открывает (рендерит) страницу с заявками req_page.html
 @login_required
 def request_list(request):
-    return render(request, 'main/req_page.html')
+    requests = Requests.objects.all()
+    return render(request, 'main/requests.html',{'requests':requests})
 
 # Метод, который открывает страницу списка пользователей
 @login_required
@@ -33,6 +34,11 @@ def user_list(request):
 @login_required
 def user_profile(request):
     return render(request,'main/profile.html')
+
+# Метод, который открывает страницу управления ИТ-активами
+@login_required
+def assets(request):
+    return render(request, 'main/assets.html')
 
 @login_required
 def register(request):
@@ -49,6 +55,20 @@ def register(request):
         user_form = New_user_form()
         profile_form = New_user_profile_form()
     return render(request, 'main/new_user.html', {'user_form': user_form, 'profile_form': profile_form})
+
+@login_required
+def create_request(request):
+    if request.method == 'POST':
+        request_form = New_request(request.POST)
+        if request_form.is_valid():
+            req = request_form.save(commit=False)
+            req.issued_by = request.user
+            req.request_date = datetime.now()
+            req.save()
+            return redirect('requests')
+    else:
+        request_form = New_request()
+    return render(request, 'main/new_request.html',{'request_form': request_form})
 
 class UserProfileView(DetailView):
     model = User

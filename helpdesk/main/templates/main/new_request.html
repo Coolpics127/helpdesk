@@ -1,0 +1,33 @@
+<!-- Содержимое страницы создания пользователя new_request.html, подставляемое в шаблон -->
+
+<!-- Объявление шаблона, в который будут подставляться данные -->
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+<!-- Подключение дополнительного CSS -->
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'main/css/new_request.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+
+<!-- Заголовок страницы -->
+{% block title %}Создание пользователя{% endblock %}
+
+{% block main %}
+
+<div class="container">
+
+    <div class="header">
+        <h3>Создание заявки</h3>
+    </div>
+
+    <div class="body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                {{ request_form.as_p }}
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

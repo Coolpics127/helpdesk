@@ -10,3 +10,5 @@ urlpatterns = [
     path('account/', include('account_app.urls')),
     path('', include('main.urls')), # При открытии корневого каталога сайта ссылка обрабатывается в файле main.urls
     ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) # Подключение статических файлов (стилей css, картинок и т.д.)
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

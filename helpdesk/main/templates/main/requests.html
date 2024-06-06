@@ -1,0 +1,65 @@
+<!-- Содержимое страницы с заявками req_page.html, подставляемое в шаблон -->
+
+<!-- Объявление шаблона, в который будут подставляться данные -->
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+<!-- Подключение дополнительного CSS -->
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'main/css/requests.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+
+<!-- Заголовок страницы -->
+{% block title %}Заявки{% endblock %}
+
+<!-- Текст на странице -->
+{% block main %}
+<h2>Список заявок</h2>
+
+<div class="query_bar">
+  <div class="wrap">
+        <div class="search_bar">
+          <input type="text" class="search_query" placeholder="Поиск по списку...">
+          <button type="submit" class="search_button">
+          <i class="fa fa-search"></i>
+          </button>
+        </div>
+  </div>
+<a href="{% url 'new_request' %}" class="create_request_button"><i class="fa-solid fa-plus button_icon"></i>Новая заявка</a>
+</div>
+
+<table class="request_list">
+ <tr class="table_header">
+     <th class="header_cell">Номер заявки</th>
+     <th class="header_cell">Дата заявки</th>
+     <th class="header_cell">Инициатор</th>
+     <th class="header_cell">Название заявки</th>
+     <th class="header_cell">Ответственный</th>
+     <th class="header_cell">Приоритет</th>
+     <th class="header_cell">Статус</th>
+     <th class="header_cell">Исполнить до</th>
+     <th class="header_cell"></th>
+ </tr>
+
+ {% for request in requests %}
+ <tr class="table_request_row">
+     <td class="request_cell">{{request.id}}</td>
+     <td class="request_cell">{{request.request_date}}</td>
+     <td class="request_cell">{{request.issued_by.last_name}} {{request.issued_by.first_name}}</td>
+     <td class="request_cell">{{request.request_name}}</td>
+     <td class="request_cell">{{request.responsible.last_name}} {{request.responsible.first_name}}</td>
+     <td class="request_cell">{{request.priority}}</td>
+     <td class="request_cell">{{request.status}}</td>
+     <td class="request_cell">{{request.desired_date}}</td>
+     <td class="request_button_cell">
+         <a title="Просмотр заявки" href="{% url 'user_details' user.id %}">
+            <div class="edit_button">
+                <i class="fa-solid fa-magnifying-glass alter_button"></i>
+            </div>
+         </a>
+     </td>
+  </tr>
+ {% endfor %}
+</table>
+
+{% endblock %}
