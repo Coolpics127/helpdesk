@@ -7,19 +7,64 @@ from django.views.generic import DetailView, UpdateView
 from .forms import New_user_form, New_user_profile_form, New_request
 from .models import Profile, Requests, Statuses, IP_map, LogPass, Customs
 
-
+# Метод, который открывает начальную страницу
 def index(request):
     return render(request, 'main/index.html')
 
-# Метод, который открывает (рендерит) страницу home.html
+# Метод, который открывает главную страницу
 @login_required
 def home(request):
     user = request.user
-    if user.groups.filter(id='1').exists():
-        return render(request, 'main/home.html')
-    else:
-        return render(request, 'main/home_user.html')
+    is_admin = user.groups.filter(id='1').exists()
+    is_moderator = user.groups.filter(id='2').exists()
+    return render(request, 'main/home.html', {'is_admin': is_admin, 'is_moderator': is_moderator})
 
+
+# ----------- ЗАЯВОЧНАЯ СИСТЕМА -----------
+# Метод, который открывает страницу списка заявок
+@login_required
+def request_list(request):
+    user = request.user
+    is_admin = user.groups.filter(id='1').exists()
+    is_moderator = user.groups.filter(id='2').exists()
+    if user.groups.filter(id='1').exists() or user.groups.filter(id='2').exists():
+        requests = Requests.objects.filter(is_deleted=False).order_by('-id')
+        return render(request, 'main/requests.html',{'requests': requests, 'is_admin': is_admin, 'is_moderator': is_moderator})
+    else:
+        requests = Requests.objects.filter(is_deleted=False, issued_by=user).order_by('-id')
+        return render(request, 'main/requests.html', {'requests': requests, 'is_admin': is_admin, 'is_moderator': is_moderator})
+
+# Метод, который открывает страницу создания заявки
+@login_required
+def create_request(request):
+    user = request.user
+    is_admin = user.groups.filter(id='1').exists()
+    is_moderator = user.groups.filter(id='2').exists()
+    if request.method == 'POST':
+        request_form = New_request(request.POST, request.FILES)
+        if request_form.is_valid():
+            req = request_form.save(commit=False)
+            req.issued_by = request.user
+            req.status = Statuses.objects.get(id='1')
+            req.save()
+            return redirect('requests')
+    else:
+        request_form = New_request()
+    if user.groups.filter(id='1').exists():
+        return render(request, 'main/new_request.html',{'request_form': request_form, 'is_admin': is_admin, 'is_moderator': is_moderator})
+    else:
+        return render(request, 'main/new_request.html', {'request_form': request_form, 'is_admin': is_admin, 'is_moderator': is_moderator})
+
+# Метод, который открывает страницу просмотра заявки (из списка заявок)
+class RequestView(DetailView):
+    model = Requests
+    template_name = 'main/request_page.html'
+    context_object_name = 'request'
+
+
+
+# ----------- ИТ-АКТИВЫ -----------
+# Метод, который открывает страницу закупок
 @login_required
 def supplies(request):
     user = request.user
@@ -29,23 +74,14 @@ def supplies(request):
     else:
         return redirect('home')
 
+# Метод, который открывает базу знаний
+@login_required
 def knoledge_base(request):
     user = request.user
     if user.groups.filter(id='1').exists():
         return render(request, 'main/knowledge_base.html')
     else:
         return redirect('home')
-
-# Метод, который открывает (рендерит) страницу с заявками req_page.html
-@login_required
-def request_list(request):
-    user = request.user
-    if user.groups.filter(id='1').exists():
-        requests = Requests.objects.filter(is_deleted=False).order_by('-id')
-        return render(request, 'main/requests.html',{'requests':requests})
-    else:
-        requests = Requests.objects.filter(is_deleted=False, issued_by=user).order_by('-id')
-        return render(request, 'main/requests_user.html', {'requests': requests})
 
 # Метод, который открывает страницу списка пользователей
 @login_required
@@ -61,10 +97,9 @@ def user_list(request):
 @login_required
 def user_profile(request):
     user = request.user
-    if user.groups.filter(id='1').exists():
-        return render(request,'main/profile.html')
-    else:
-        return render(request,'main/profile_user.html')
+    is_admin = user.groups.filter(id='1').exists()
+    is_moderator = user.groups.filter(id='2').exists()
+    return render(request, 'main/profile.html', {'is_admin': is_admin, 'is_moderator': is_moderator})
 
 # Метод, который открывает страницу управления ИТ-активами
 @login_required
@@ -75,6 +110,7 @@ def assets(request):
     else:
         return redirect('home')
 
+# Метод, который открывает страницу IP-адресов
 @login_required
 def ip_list(request):
     user = request.user
@@ -84,6 +120,7 @@ def ip_list(request):
     else:
         return redirect('home')
 
+# Метод, который открывает страницу учетных записей
 @login_required
 def logpasslist(request):
     user = request.user
@@ -93,6 +130,7 @@ def logpasslist(request):
     else:
         return redirect('home')
 
+# Метод, который открывает страницу регистрации нового пользователя
 @login_required
 def register(request):
     user = request.user
@@ -113,29 +151,13 @@ def register(request):
     else:
         return redirect('home')
 
-@login_required
-def create_request(request):
-    user = request.user
-    if request.method == 'POST':
-        request_form = New_request(request.POST, request.FILES)
-        if request_form.is_valid():
-            req = request_form.save(commit=False)
-            req.issued_by = request.user
-            req.status = Statuses.objects.get(id='1')
-            req.save()
-            return redirect('requests')
-    else:
-        request_form = New_request()
-    if user.groups.filter(id='1').exists():
-        return render(request, 'main/new_request.html',{'request_form': request_form})
-    else:
-        return render(request, 'main/new_request_user.html', {'request_form': request_form})
-
+# Метод, который открывает страницу просмотра профиля пользователя (из списка пользователей)
 class UserProfileView(DetailView):
     model = User
     template_name = 'main/user_profile.html'
     context_object_name = 'user'
 
+# Метод, который открывает страницу просмотра обновления пользователя (страницы просмотра профиля)
 class UserProfileUpdate(UpdateView):
     model = Profile
     form_class = New_user_profile_form
@@ -167,8 +189,3 @@ class UserProfileUpdate(UpdateView):
 
     def get_absolute_url(self):
         return f'/users/{self.id}'
-
-class RequestView(DetailView):
-    model = Requests
-    template_name = 'main/request_page.html'
-    context_object_name = 'request'

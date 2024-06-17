@@ -1,0 +1,38 @@
+if request.status == "Новая":
+    if instance.user.role == "Администратор":
+        template_name = 'request_page_admin'
+
+    elif instance.user.role == "Модератор":
+        template_name = 'request_page_moderator'
+
+    elif instance.user.role == "Пользователь":
+        template_name = 'request_page'
+
+    else:
+        template_name = 'error_404'
+
+elif request.status == "В работе (администратор)":
+    if instance.user.role == "Администратор":
+        template_name = 'request_exec'
+
+    elif instance.user.role == "Модератор":
+        template_name = 'request_page'
+
+    elif instance.user.role == "Пользователь":
+        template_name = 'request_page'
+
+    else:
+        template_name = 'error_404'
+
+elif request.status == "Назначен исполнитель":
+    if instance.user.role == "Администратор":
+        template_name = 'request_page'
+
+    elif instance.user.role == "Модератор":
+        template_name = 'request_exec'
+
+    elif instance.user.role == "Пользователь":
+        template_name = 'request_page'
+
+    else:
+        template_name = 'error_404'

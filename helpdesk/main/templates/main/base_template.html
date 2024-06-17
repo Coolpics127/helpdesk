@@ -36,8 +36,8 @@
 </head>
 <body>
    <a href="{% url 'home' %}" class="h1"><i class="fa-solid fa-laptop-code fa-sm main_logo"></i>HELPDESK</a>
-    <nav>
-
+   {% if is_admin or is_moderator %}
+   <nav>
         <ul>
             <a href="{% url 'requests' %}"><li class="menu_item">Заявки</li></a>
             <a href="{% url 'assets' %}"><li class="menu_item">ИТ-активы</li></a>
@@ -60,7 +60,24 @@
                 </div>
             </div>
         </ul>
-    </nav>
+   </nav>
+   {% else %}
+   <nav>
+        <ul>
+            <a href="{% url 'requests' %}"><li class="menu_item">Заявки</li></a>
+            <a href="{% url 'knowledge' %}"><li class="menu_item">Знания</li></a>
+            <div class="profile">
+                <button class="profile_username">
+                    {{ request.user.last_name }}&nbsp;{{ request.user.first_name }}
+                <i class="fa fa-angle-down dropdown_logo"></i></button>
+                <div class="profile_dropdown">
+                    <a href="{% url 'user_profile' %}" class="profile_dropdown_list">Профиль</a>
+                    <a href="{% url 'logout' %}" class="profile_dropdown_list">Выход</a>
+                </div>
+            </div>
+        </ul>
+   </nav>
+   {% endif %}
         {% block main %}
         {% endblock %}
 </body>

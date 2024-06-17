@@ -40,6 +40,7 @@ h3 {
   padding: 1% 1% 1% 2%;
   border: 1px solid #64a2bd;
   border-radius: 15px;
+  resize: none;
 }
 
 #id_desired_date {
