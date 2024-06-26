@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.db import transaction
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.views.generic import DetailView, UpdateView
-from .forms import New_user_form, New_user_profile_form, New_request
+from django.views.generic import DetailView
+from .forms import New_user_form, New_user_profile_form, New_request, User_edit_form, Request_response
 from .models import Profile, Requests, Statuses, IP_map, LogPass, Customs
 
 # Метод, который открывает начальную страницу
@@ -55,12 +54,24 @@ def create_request(request):
     else:
         return render(request, 'main/new_request.html', {'request_form': request_form, 'is_admin': is_admin, 'is_moderator': is_moderator})
 
-# Метод, который открывает страницу просмотра заявки (из списка заявок)
-class RequestView(DetailView):
-    model = Requests
-    template_name = 'main/request_page.html'
-    context_object_name = 'request'
+def request_view(request, pk):
+    user = request.user
+    is_admin = user.groups.filter(id='1').exists()
+    is_moderator = user.groups.filter(id='2').exists()
+    request1 = Requests.objects.get(pk=pk)
+    response_form = Request_response(instance=request1)
+    instance_status = request1.status_id
 
+    if request.method == 'POST':
+        response_form = Request_response(request.POST, request.FILES, instance=request1)
+        if response_form.is_valid():
+                request1.save()
+                return redirect('requests')
+        else:
+            response_form = Request_response()
+        return render(request, 'main/request_view.html', {'is_admin': is_admin, 'is_moderator': is_moderator, 'request': request1, 'response_form': response_form, 'status': instance_status})
+    else:
+        return render(request, 'main/request_view.html', {'is_admin': is_admin, 'is_moderator': is_moderator, 'request': request1, 'response_form': response_form, 'status': instance_status})
 
 
 # ----------- ИТ-АКТИВЫ -----------
@@ -137,7 +148,7 @@ def register(request):
     if user.groups.filter(id='1').exists():
         if request.method == 'POST':
             user_form = New_user_form(request.POST, request.FILES)
-            profile_form = New_user_profile_form(request.POST)
+            profile_form = New_user_profile_form(request.POST, request.FILES)
             if user_form.is_valid() and profile_form.is_valid():
                 user = user_form.save()
                 profile = profile_form.save(commit = False)
@@ -157,35 +168,27 @@ class UserProfileView(DetailView):
     template_name = 'main/user_profile.html'
     context_object_name = 'user'
 
-# Метод, который открывает страницу просмотра обновления пользователя (страницы просмотра профиля)
-class UserProfileUpdate(UpdateView):
-    model = Profile
-    form_class = New_user_profile_form
-    template_name = 'main/edit_user.html'
+@login_required
+def user_update(request, pk):
 
-    def get_object(self, queryset=None):
-        return self.request.user.profile
+    user = User.objects.get(pk=pk)
+    this_user = User.objects.get(pk=pk)
+    profile = Profile.objects.get(user=pk)
+    user_form = User_edit_form(instance=user)
+    profile_form = New_user_profile_form(instance=profile)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = f'Редактирование профиля пользователя: {self.request.user.username}'
-        if self.request.POST:
-            context['user_form'] = New_user_form(self.request.POST, instance=self.request.user)
+    if request.method == 'POST':
+        user_form = User_edit_form(request.POST, request.FILES, instance=user)
+        profile_form = New_user_profile_form(request.POST, request.FILES, instance=profile)
+        if user_form.is_valid() and profile_form.is_valid():
+                user = user_form.save()
+                profile = profile_form.save(commit=False)
+                profile.user = user
+                profile.save()
+                return redirect('users')
         else:
-            context['user_form'] = New_user_form(instance=self.request.user)
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        user_form = context['user_form']
-        with transaction.atomic():
-            if all([form.is_valid(), user_form.is_valid()]):
-                user_form.save()
-                form.save()
-            else:
-                context.update({'user_form': user_form})
-                return self.render_to_response(context)
-        return super(UserProfileUpdate, self).form_valid(form)
-
-    def get_absolute_url(self):
-        return f'/users/{self.id}'
+            user_form = New_user_form()
+            profile_form = New_user_profile_form()
+        return render(request, 'main/user_edit.html', {'user_form': user_form, 'profile_form': profile_form, 'this_user': this_user})
+    else:
+        return render(request, 'main/user_edit.html', {'user_form': user_form, 'profile_form': profile_form, 'this_user': this_user})

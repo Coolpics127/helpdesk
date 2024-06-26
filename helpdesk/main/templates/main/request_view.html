@@ -1,0 +1,76 @@
+<!-- Объявление шаблона, в который будут подставляться данные -->
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+<!-- Подключение дополнительного CSS -->
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'main/css/request_view.css' %}" xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+
+<!-- Заголовок страницы -->
+{% block title %}Просмотр заявки{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="header">
+            <h3>Заявка №{{request.id}} от {{request.request_date}}</h3>
+        </div>
+        <div class="body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="rows">
+                        <p class="detailed_view_headers">Инициатор заявки:</p>
+                        <div class="detailed_view_fields">{{ request.issued_by.last_name }} {{ request.issued_by.first_name }}</div>
+                        <p class="detailed_view_headers">Название заявки:</p>
+                        <div class="detailed_view_fields">{{request.request_name|default_if_none:'' }}</div>
+                        <p class="detailed_view_headers">Описание заявки:</p>
+                        <div class="detailed_view_fields">{{ request.request_description|default_if_none:'' }}</div>
+                        <p class="detailed_view_headers">Исполнитель:</p>
+                        <div class="detailed_view_fields">{{ request.responsible.last_name }} {{ request.responsible.first_name }}</div>
+                        <div class="properties">
+                            <p class="detailed_view_headers">Приоритет: {{ request.priority }}</p>
+                            <p class="detailed_view_headers">Статус: {{ request.status }}</p>
+                            <p class="detailed_view_headers">Желаемая дата исполнения: {{ request.desired_date|default_if_none:'' }}</p>
+                        </div>
+                        {% if request.attachment %}
+                            <p class="detailed_view_headers">Прикрепленные объекты: </p>
+                            <p><a href="{{ request.attachment.url }}" download>{{ request.attachment.name|cut:'user_files/' }}</a>
+                        {% else %}
+                            <p></p>
+                        {% endif %}
+                    <div class="request_fields">
+                        {% if status == 2 %}
+                            {% if is_moderator %}
+                                <p>Комментарий исполнителя:</p>
+                                {{ response_form.commentary }}
+                                <p>Прикрепить объекты: {{ response_form.responce_attachments }}</p>
+                            {% endif %}
+                        <p class="detailed_view_headers">Комментарий исполнителя:</p>
+                        <div class="detailed_view_fields">{{ request.commentary|default_if_none:'' }}</div>
+                        {% elif status == 4 %}
+                        <p class="detailed_view_headers">Комментарий администратора:</p>
+                        <div class="detailed_view_fields">{{ request.revision_commentary|default_if_none:'' }}</div>
+                        {% elif status == 6 %}
+                        <p class="detailed_view_headers">Комментарий удаления:</p>
+                        <div class="detailed_view_fields">{{ request.delete_commentary|default_if_none:''}}</div>
+                        {% endif %}
+                        <p class="detailed_view_headers">Прикрепленные объекты (исполнитель): {{ request.responce_attachments }}</p>
+                        {% if status == 5 %}
+                        <p class="detailed_view_headers">Дата исполнения: {{ request.date_completed|default_if_none:'' }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="buttons">
+                    {% if status == 2 %}
+                            {% if is_moderator %}
+                                <button type="submit" class="submit_button">Задача выполнена</button>
+                            {% endif %}
+                    {% endif %}
+                    <button onclick="window.location.href='{% url 'requests' %}';" type="button" class="back_button">Назад</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

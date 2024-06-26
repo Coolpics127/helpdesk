@@ -1,7 +1,7 @@
+import os
+
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils import timezone
 
 
@@ -48,18 +48,6 @@ class Profile (models.Model):
     def __str__(self):
         return self.patron
 
-    # Сигналы на автоматическое обновление таблицы при создании или изменении данных пользователя
-    '''
-    @receiver(post_save, sender=User)
-    def new_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
-
-    @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
-    '''
-
 # Таблица "Заявки"
 class Requests (models.Model):
     request_date = models.DateTimeField(blank=True, null=True, default=timezone.now, editable=False)
@@ -69,16 +57,18 @@ class Requests (models.Model):
     responsible = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE, related_name='%(class)s_worker')
     priority = models.ForeignKey(Priorities, blank=False, on_delete=models.CASCADE)
     status = models.ForeignKey(Statuses, on_delete=models.CASCADE, blank=True, null=True)
-    desired_date = models.DateTimeField(blank=True, null=True, default='')
+    desired_date = models.DateTimeField(blank=False, null=True)
     attachment = models.FileField(blank=True, null=True, upload_to='user_files/')
     commentary = models.TextField(blank=True, null=True)
     delete_commentary = models.TextField(blank=True, null=True)
     revision_commentary = models.TextField(blank=True, null=True)
+    responce_attachments = models.FileField(blank=True, null=True, upload_to='user_files/')
     date_completed = models.DateTimeField(blank=True, null=True)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.request_name
+
 
 class Hardware (models.Model):
     name = models.CharField(max_length=100)
