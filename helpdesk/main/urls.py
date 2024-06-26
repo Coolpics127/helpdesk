@@ -1,14 +1,15 @@
 from django.urls import path
-from . import views # Импорт файла с методами вывода информации на экран views.py
+from . import views
 
-# При открытии корневой страницы сайта выполнится метод
-# views.index выводящий пользователю главную страницу сайта
 urlpatterns = [
     path('', views.index),
     path('home', views.home, name='home'),
+
     path('requests', views.request_list, name='requests'),
     path('requests/new_request', views.create_request, name='new_request'),
     path('requests/<int:pk>',views.request_view, name='request_details'),
+    path('requests/<int:pk>/accept', views.accept, name='request_accept'),
+
     path('assets', views.assets, name='assets'),
     path('assets/ip_list', views.ip_list, name='ip_list'),
     path('assets/logpass_list', views.logpasslist, name='logpass'),

@@ -61,7 +61,7 @@ class New_request(forms.ModelForm):
     responsible = ResponsibleChoiceField(label='Выберите исполнителя', empty_label='Исполнитель...', queryset=User.objects.filter(Q(groups='1') | Q(groups='2')), required=False, to_field_name="last_name")
     priority = forms.ModelChoiceField(label='Приоритет', empty_label='Приоритет...', queryset=Priorities.objects.all(), required=True)
     status = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    desired_date = forms.DateTimeField(label='Желаемая дата исполнения', widget=forms.DateTimeInput(attrs={'class': 'form-input'}), required=True)
+    desired_date = forms.DateTimeField(label='Желаемая дата исполнения', widget=forms.DateTimeInput(attrs={'class': 'form-input'}),required=False)
     attachment = forms.FileField(label='Прикрепленные объекты',widget=forms.FileInput(attrs={'class': 'form-input'}),required=False)
 
     class Meta:

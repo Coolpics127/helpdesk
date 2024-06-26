@@ -50,7 +50,7 @@
      <td class="request_cell">{{request.responsible.last_name}} {{request.responsible.first_name}}</td>
      <td class="request_cell">{{request.priority}}</td>
      <td class="request_cell">{{request.status}}</td>
-     <td class="request_cell">{{request.desired_date}}</td>
+     <td class="request_cell">{{request.desired_date|default_if_none:'-'}}</td>
      <td class="request_button_cell">
          <a title="Просмотр заявки" href="{% url 'request_details' request.id %}">
             <div class="edit_button">

@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from django.views.generic import DetailView
 from .forms import New_user_form, New_user_profile_form, New_request, User_edit_form, Request_response
 from .models import Profile, Requests, Statuses, IP_map, LogPass, Customs
@@ -56,11 +58,13 @@ def create_request(request):
 
 def request_view(request, pk):
     user = request.user
+    this_user = request.user.id
     is_admin = user.groups.filter(id='1').exists()
     is_moderator = user.groups.filter(id='2').exists()
     request1 = Requests.objects.get(pk=pk)
     response_form = Request_response(instance=request1)
     instance_status = request1.status_id
+    responsible = request1.responsible_id
 
     if request.method == 'POST':
         response_form = Request_response(request.POST, request.FILES, instance=request1)
@@ -69,9 +73,31 @@ def request_view(request, pk):
                 return redirect('requests')
         else:
             response_form = Request_response()
-        return render(request, 'main/request_view.html', {'is_admin': is_admin, 'is_moderator': is_moderator, 'request': request1, 'response_form': response_form, 'status': instance_status})
+        return render(request, 'main/request_view.html',
+                      {'is_admin': is_admin,
+                       'is_moderator': is_moderator,
+                       'request': request1,
+                       'response_form': response_form,
+                       'status': instance_status,
+                       'responsible': responsible,
+                       'this_user': this_user})
     else:
-        return render(request, 'main/request_view.html', {'is_admin': is_admin, 'is_moderator': is_moderator, 'request': request1, 'response_form': response_form, 'status': instance_status})
+        return render(request, 'main/request_view.html',
+                      {'is_admin': is_admin,
+                       'is_moderator': is_moderator,
+                       'request': request1,
+                       'response_form': response_form,
+                       'status': instance_status,
+                       'responsible': responsible,
+                       'this_user': this_user})
+
+
+def accept(request, pk):
+    request1 = Requests.objects.get(pk=pk)
+    status = Statuses.objects.get(id='2')
+    request1.status_id = status
+    request1.save()
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 # ----------- ИТ-АКТИВЫ -----------
