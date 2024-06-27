@@ -9,6 +9,8 @@ urlpatterns = [
     path('requests/new_request', views.create_request, name='new_request'),
     path('requests/<int:pk>',views.request_view, name='request_details'),
     path('requests/<int:pk>/accept', views.accept, name='request_accept'),
+    path('requests/<int:pk>/cancellation', views.cancellation, name='request_cancellation'),
+    path('requests/<int:pk>/cancel', views.cancel, name='request_cancel'),
 
     path('assets', views.assets, name='assets'),
     path('assets/ip_list', views.ip_list, name='ip_list'),

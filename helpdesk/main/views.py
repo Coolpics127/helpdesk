@@ -1,9 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
 from django.views.generic import DetailView
 from .forms import New_user_form, New_user_profile_form, New_request, User_edit_form, Request_response
 from .models import Profile, Requests, Statuses, IP_map, LogPass, Customs
@@ -28,12 +27,18 @@ def request_list(request):
     user = request.user
     is_admin = user.groups.filter(id='1').exists()
     is_moderator = user.groups.filter(id='2').exists()
-    if user.groups.filter(id='1').exists() or user.groups.filter(id='2').exists():
+    if user.groups.filter(id='1').exists():
         requests = Requests.objects.filter(is_deleted=False).order_by('-id')
-        return render(request, 'main/requests.html',{'requests': requests, 'is_admin': is_admin, 'is_moderator': is_moderator})
+        return render(request, 'main/requests.html',
+                      {'requests': requests, 'is_admin': is_admin, 'is_moderator': is_moderator})
+    elif user.groups.filter(id='2').exists():
+        requests = Requests.objects.filter((Q(is_deleted=False) & Q(status='1'))|(Q(is_deleted=False) & Q(responsible=user))).order_by('-id')
+        return render(request, 'main/requests.html',
+                      {'requests': requests, 'is_admin': is_admin, 'is_moderator': is_moderator})
     else:
         requests = Requests.objects.filter(is_deleted=False, issued_by=user).order_by('-id')
-        return render(request, 'main/requests.html', {'requests': requests, 'is_admin': is_admin, 'is_moderator': is_moderator})
+        return render(request, 'main/requests.html',
+                      {'requests': requests, 'is_admin': is_admin, 'is_moderator': is_moderator})
 
 # Метод, который открывает страницу создания заявки
 @login_required
@@ -95,10 +100,35 @@ def request_view(request, pk):
 def accept(request, pk):
     request1 = Requests.objects.get(pk=pk)
     status = Statuses.objects.get(id='2')
+    this_user = request.user.id
+    request1.status_id = status
+    request1.responsible_id = this_user
+    request1.save()
+    return redirect(request.META.get('HTTP_REFERER'))
+
+def cancellation(request, pk):
+    request1 = Requests.objects.get(pk=pk)
+    status = Statuses.objects.get(id='6')
     request1.status_id = status
     request1.save()
     return redirect(request.META.get('HTTP_REFERER'))
 
+def cancel(request, pk):
+    request1 = Requests.objects.get(pk=pk)
+    status = Statuses.objects.get(id='7')
+    response_form = Request_response(instance=request1)
+
+    if request.method == 'POST':
+        response_form = Request_response(request.POST, request.FILES, instance=request1)
+        if response_form.is_valid():
+            request1.status_id = status
+            request1.save()
+            return redirect('requests')
+        else:
+            response_form = Request_response()
+        return render(request, 'main/request_view.html',{'request': request1, 'response_form': response_form})
+    else:
+        return render(request, 'main/request_view.html',{'request': request1, 'response_form': response_form})
 
 # ----------- ИТ-АКТИВЫ -----------
 # Метод, который открывает страницу закупок

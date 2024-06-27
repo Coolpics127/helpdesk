@@ -89,19 +89,18 @@
                     {% if status == 1 %}
                         {% if is_moderator %}
                             <a href="{% url 'request_accept' request.id %}" class="submit_button">Взять в работу</a>
-                            <button type="submit" class="cancel_button">Отменить заявку</button>
                         {% elif is_admin and responsible == this_user %}
                             <button type="submit" class="submit_button">Задача выполнена</button>
-                            <button type="submit" class="cancel_button">Отменить заявку</button>
+                            <a href="{% url 'request_cancellation' request.id %}" class="cancel_button">Отменить заявку</a>
                         {% else %}
                             <button type="submit" class="submit_button">Редактировать</button>
-                            <button type="submit" class="cancel_button">Отменить заявку</button>
+                            <a href="{% url 'request_cancellation' request.id %}" class="cancel_button">Отменить заявку</a>
                     {% endif %}
 
                     {% elif status == 2 %}
                         {% if is_moderator %}
                             <button type="submit" class="submit_button">Задача выполнена</button>
-                            <button type="submit" class="cancel_button">Отменить заявку</button>
+                            <a href="{% url 'request_cancellation' request.id %}" class="cancel_button">Отменить заявку</a>
                         {% endif %}
 
                     {% elif status == 3 %}
@@ -116,7 +115,7 @@
                         {% endif %}
 
                     {% elif status == 6 %}
-                        <button type="submit" class="cancel_button">Отменить заявку</button>
+                        <a href="{% url 'request_cancel' request.id %}" class="cancel_button">Отменить заявку</a>
 
                     {% elif status == 5 or status == 7%}
                         {% if is_admin or is_moderator %}
