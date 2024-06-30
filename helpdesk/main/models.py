@@ -42,7 +42,7 @@ class Profile (models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     patron = models.CharField(max_length=100)
     job = models.ForeignKey(Jobs, blank=True, default='', null=True, on_delete=models.CASCADE)
-    phone = models.CharField(blank=True, max_length=20)
+    phone = models.CharField(blank=True, max_length=40)
     picture = models.ImageField(blank=True, null=True, upload_to='avatars/', default='avatars/default_profile.jpg')
 
     def __str__(self):

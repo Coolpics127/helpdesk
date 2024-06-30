@@ -42,8 +42,8 @@
  <tr class="table_user_row">
      <td class="user_cell">{{ip.id}}</td>
      <td class="user_cell">{{ip.ip_adress}}</td>
-     <td class="user_cell">{{ip.mac_adress}}</td>
-     <td class="user_cell">{{ip.user.last_name}} {{ip.user.first_name}}</td>
+     <td class="user_cell">{{ip.mac_adress|default_if_none:'-'}}</td>
+     <td class="user_cell">{{ip.user.last_name|default_if_none:'-'}} {{ip.user.first_name|default_if_none:'-'}}</td>
      <td class="user_cell">{{ip.name}}</td>
      <td class="user_cell">{{ip.hardware.name}}</td>
 
