@@ -43,6 +43,18 @@ h3 {
   resize: none;
 }
 
+#id_commentary {
+  width: 96%;
+}
+
+#id_revision_commentary {
+  width: 96%;
+}
+
+#id_responce_attachments{
+  border: none;
+}
+
 #id_responsible {
   margin-left: 1%;
   padding: 1% 1% 1% 2%;
@@ -75,6 +87,7 @@ h3 {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  margin-top: 3%;
   padding-top: 2%;
   border-top: 1px solid black;
   gap: 1%;

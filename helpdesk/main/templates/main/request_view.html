@@ -14,32 +14,35 @@
 <div class="main">
     <div class="container">
         <div class="header">
-            <h3>Заявка №{{request.id}} от {{request.request_date}}</h3>
+            <h3>Заявка №{{request1.id}} от {{request1.request_date}}</h3>
         </div>
         <div class="body">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="rows">
                         <p class="detailed_view_headers">Инициатор заявки:</p>
-                        <div class="detailed_view_fields">{{ request.issued_by.last_name }} {{ request.issued_by.first_name }}</div>
+                        <div class="detailed_view_fields">{{ request1.issued_by.last_name }} {{ request1.issued_by.first_name }}</div>
                         <p class="detailed_view_headers">Название заявки:</p>
-                        <div class="detailed_view_fields">{{request.request_name|default_if_none:'' }}</div>
+                        <div class="detailed_view_fields">{{request1.request_name|default_if_none:'' }}</div>
                         <p class="detailed_view_headers">Описание заявки:</p>
-                        <div class="detailed_view_fields">{{ request.request_description|default_if_none:'' }}</div>
+                        <div class="detailed_view_fields">{{ request1.request_description|default_if_none:'' }}</div>
                         <p class="detailed_view_headers">Исполнитель:</p>
-                        <div class="detailed_view_fields">{{ request.responsible.last_name }} {{ request.responsible.first_name }}</div>
+                        <div class="detailed_view_fields">{{ request1.responsible.last_name }} {{ request1.responsible.first_name }}</div>
                         <div class="properties">
-                            <p class="detailed_view_headers">Приоритет: {{ request.priority }}</p>
-                            <p class="detailed_view_headers">Статус: {{ request.status }}</p>
-                            <p class="detailed_view_headers">Желаемая дата исполнения: {{ request.desired_date|default_if_none:'-' }}</p>
+                            <p class="detailed_view_headers">Приоритет: {{ request1.priority }}</p>
+                            <p class="detailed_view_headers">Статус: {{ request1.status }}</p>
+                            <p class="detailed_view_headers">Желаемая дата исполнения: {{ request1.desired_date|default_if_none:'-' }}</p>
                         </div>
-                        {% if request.attachment %}
+                        {% if request1.attachment %}
                             <p class="detailed_view_headers">Прикрепленные объекты: </p>
-                            <p><a href="{{ request.attachment.url }}" download>{{ request.attachment.name|cut:'user_files/' }}</a>
+                            <p><a href="{{ request.attachment.url }}" download>{{ request1.attachment.name|cut:'user_files/' }}</a>
                         {% else %}
                             <p></p>
                         {% endif %}
+
+                    {% if status != 1  %}
                     <div class="request_fields">
+                    {% endif %}
 
                         {% if status == 2 %}
                             {% if is_moderator %}
@@ -51,17 +54,17 @@
 
                         {% if status == 3 %}
                             <p class="detailed_view_headers">Комментарий исполнителя:</p>
-                            <div class="detailed_view_fields">{{ request.commentary|default_if_none:'' }}</div>
-                            <p class="detailed_view_headers">Прикрепленные объекты (исполнитель): {{ request.responce_attachments }}</p>
+                            <div class="detailed_view_fields">{{ request1.commentary|default_if_none:'' }}</div>
+                            <p class="detailed_view_headers">Прикрепленные объекты (исполнитель): {{ request1.responce_attachments }}</p>
                             {% if is_admin %}
-                                <p class="detailed_view_headers">Комментарий администратора:</p>
-                                <div class="detailed_view_fields">{{ response_form.revision_commentary }}</div>
+                                <p>Комментарий администратора:</p>
+                                {{ response_form.revision_commentary }}
                             {% endif %}
                         {% endif %}
 
                         {% if status == 4 %}
                             <p class="detailed_view_headers">Комментарий администратора:</p>
-                            <div class="detailed_view_fields">{{ request.revision_commentary|default_if_none:'' }}</div>
+                            <div class="detailed_view_fields">{{ request1.revision_commentary|default_if_none:'' }}</div>
                             {% if is_moderator %}
                                 <p>Комментарий исполнителя:</p>
                                 {{ response_form.commentary }}
@@ -80,7 +83,11 @@
                         {% endif %}
 
                         {% if status == 5 %}
-                            <p class="detailed_view_headers">Дата исполнения: {{ request.date_completed|default_if_none:'' }}</p>
+                            <p class="detailed_view_headers">Комментарий исполнителя:</p>
+                            <div class="detailed_view_fields">{{ request1.commentary|default_if_none:'' }}</div>
+                            <p class="detailed_view_headers">Комментарий администратора:</p>
+                            <div class="detailed_view_fields">{{ request1.revision_commentary|default_if_none:'' }}</div>
+                            <p class="detailed_view_headers">Дата исполнения: {{ request1.date_completed|default_if_none:'' }}</p>
                         {% endif %}
 
                     </div>
@@ -88,19 +95,20 @@
                 <div class="buttons">
                     {% if status == 1 %}
                         {% if is_moderator %}
-                            <a href="{% url 'request_accept' request.id %}" class="submit_button">Взять в работу</a>
+                            <a href="{% url 'request_accept' request1.id %}" class="submit_button">Взять в работу</a>
                         {% elif is_admin and responsible == this_user %}
                             <button type="submit" class="submit_button">Задача выполнена</button>
-                            <a href="{% url 'request_cancellation' request.id %}" class="cancel_button">Отменить заявку</a>
+                            <a href="{% url 'request_cancellation' request1.id %}" class="cancel_button">Отменить заявку</a>
                         {% else %}
                             <button type="submit" class="submit_button">Редактировать</button>
-                            <a href="{% url 'request_cancellation' request.id %}" class="cancel_button">Отменить заявку</a>
+                            <a href="{% url 'request_cancellation' request1.id %}" class="cancel_button">Отменить заявку</a>
                     {% endif %}
 
                     {% elif status == 2 %}
                         {% if is_moderator %}
                             <button type="submit" class="submit_button">Задача выполнена</button>
-                            <a href="{% url 'request_cancellation' request.id %}" class="cancel_button">Отменить заявку</a>
+                            <!--<a href="{% url 'request_review' request1.id %}" class="submit_button">Задача выполнена</a>-->
+                            <a href="{% url 'request_cancellation' request1.id %}" class="cancel_button">Отменить заявку</a>
                         {% endif %}
 
                     {% elif status == 3 %}
@@ -115,7 +123,7 @@
                         {% endif %}
 
                     {% elif status == 6 %}
-                        <a href="{% url 'request_cancel' request.id %}" class="cancel_button">Отменить заявку</a>
+                        <a href="{% url 'request_cancel' request1.id %}" class="cancel_button">Отменить заявку</a>
 
                     {% elif status == 5 or status == 7%}
                         {% if is_admin or is_moderator %}
