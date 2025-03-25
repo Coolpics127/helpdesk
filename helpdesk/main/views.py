@@ -17,7 +17,8 @@ def home(request):
     user = request.user
     is_admin = user.groups.filter(id='1').exists()
     is_moderator = user.groups.filter(id='2').exists()
-    return render(request, 'main/home.html', {'is_admin': is_admin, 'is_moderator': is_moderator})
+    return render(request, 'main/home.html',
+                  {'is_admin': is_admin, 'is_moderator': is_moderator})
 
 
 # ----------- ЗАЯВОЧНАЯ СИСТЕМА -----------

@@ -81,7 +81,7 @@ DATABASES = { # Подключение базы данных
         'NAME': 'requests_db',
         'USER': 'Django',
         'PASSWORD': 'cp3505dn',
-        'HOST': '127.0.0.1',
+        'HOST': '192.168.0.200',
         'PORT': '3306',
     }
 }

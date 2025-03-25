@@ -20,9 +20,12 @@
     <div class="index_text_block">Система HELPDESK помогает пользователями решать проблемы с программным и аппаратным обеспечением, предоставляет консультации по использованию компьютерной техники. Наши специалисты помогут вам решить любые технические проблемы.
         <br><b>Система находится на стадии разработки.</b></div>
     <div class="index_buttons">
-        <a href="{% url 'requests' %}" class="index_button"><i class="fa-solid fa-list-ul logo_on_button"></i>Список заявок</a>
-        <a href="{% url 'users' %}" class="index_button"><i class="fa-solid fa-user logo_on_button"></i>Пользователи</a>
-        <a href="" class="index_button"><i class="fa-solid fa-database logo_on_button"></i>База знаний</a>
+        <a href="{% url 'requests' %}" class="index_button">
+            <i class="fa-solid fa-list-ul logo_on_button"></i>Список заявок</a>
+        <a href="{% url 'users' %}" class="index_button">
+            <i class="fa-solid fa-user logo_on_button"></i>Пользователи</a>
+        <a href="{% url 'knowledge' %}" class="index_button">
+            <i class="fa-solid fa-database logo_on_button"></i>База знаний</a>
 
     </div>
 </div>
