@@ -82,7 +82,7 @@ def request_view(request, pk):
         return render(request, 'main/request_view.html',
                       {'is_admin': is_admin,
                        'is_moderator': is_moderator,
-                       'request': request1,
+                       'request1': request1,
                        'response_form': response_form,
                        'status': instance_status,
                        'responsible': responsible,
@@ -91,7 +91,7 @@ def request_view(request, pk):
         return render(request, 'main/request_view.html',
                       {'is_admin': is_admin,
                        'is_moderator': is_moderator,
-                       'request': request1,
+                       'request1': request1,
                        'response_form': response_form,
                        'status': instance_status,
                        'responsible': responsible,
@@ -116,20 +116,34 @@ def cancellation(request, pk):
 
 def cancel(request, pk):
     request1 = Requests.objects.get(pk=pk)
-    status = Statuses.objects.get(id='7')
     response_form = Request_response(instance=request1)
 
     if request.method == 'POST':
         response_form = Request_response(request.POST, request.FILES, instance=request1)
         if response_form.is_valid():
-            request1.status_id = status
+            request1.status = Statuses.objects.get(id='7')
+            request1.update()
+            return redirect('requests')
+        else:
+            response_form = Request_response()
+        return render(request, 'main/requests.html',{'request1': request1, 'response_form': response_form})
+    else:
+        return render(request, 'main/requests.html',{'request1': request1, 'response_form': response_form})
+
+def review(request, pk):
+    request1 = Requests.objects.get(pk=pk)
+    response_form = Request_response(instance=request1)
+    if request.method == 'POST':
+        response_form = Request_response(request.POST, request.FILES, instance=request1)
+        if response_form.is_valid():
             request1.save()
             return redirect('requests')
         else:
             response_form = Request_response()
-        return render(request, 'main/request_view.html',{'request': request1, 'response_form': response_form})
+        return render(request, 'main/request_view.html', {'request1': request1, 'response_form': response_form})
     else:
-        return render(request, 'main/request_view.html',{'request': request1, 'response_form': response_form})
+        return render(request, 'main/request_view.html', {'request1': request1, 'response_form': response_form})
+
 
 # ----------- ИТ-АКТИВЫ -----------
 # Метод, который открывает страницу закупок
@@ -138,7 +152,7 @@ def supplies(request):
     user = request.user
     if user.groups.filter(id='1').exists():
         supplies = Customs.objects.all()
-        return render(request, 'main/finances.html', {'supplies':supplies})
+        return render(request, 'main/finances.html', {'supplies': supplies})
     else:
         return redirect('home')
 
